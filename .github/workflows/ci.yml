@@ -32,14 +32,14 @@ jobs:
             artifact_name: x402-linux-aarch64
             use_cross: true
 
-          # macOS x86_64
-          - os: macos-13
+          # macOS x86_64 (cross-compile from Apple Silicon)
+          - os: macos-14
             target: x86_64-apple-darwin
             platform: darwin-x86_64
             artifact_name: x402-darwin-x86_64
 
           # macOS aarch64 (Apple Silicon)
-          - os: macos-latest
+          - os: macos-14
             target: aarch64-apple-darwin
             platform: darwin-aarch64
             artifact_name: x402-darwin-aarch64
