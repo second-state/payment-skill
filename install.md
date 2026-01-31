@@ -17,9 +17,9 @@ SKILL_DIR="${HOME}/.claude/skills/x402"
 mkdir -p "$(dirname "$SKILL_DIR")"
 
 # Clone the skill directory
-git clone --depth 1 https://github.com/second-state/x402-agent-tools.git /tmp/x402-repo
-cp -r /tmp/x402-repo/skill "$SKILL_DIR"
-rm -rf /tmp/x402-repo
+git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
+cp -r /tmp/payment-skill-repo/skill "$SKILL_DIR"
+rm -rf /tmp/payment-skill-repo
 
 # Download platform-specific binaries
 "${SKILL_DIR}/bootstrap.sh"
@@ -109,7 +109,7 @@ Wallet and configuration are stored separately (persists across reinstalls):
 
 If automatic download fails, manually download binaries:
 
-1. Go to https://github.com/second-state/x402-agent-tools/releases/latest
+1. Go to https://github.com/second-state/payment-skill/releases/latest
 2. Download the zip for your platform:
    - `x402-linux-x86_64.zip`
    - `x402-linux-aarch64.zip`
@@ -140,7 +140,7 @@ rm -rf "${HOME}/.claude/skills/x402"
 ### Download Failed
 Check network connectivity:
 ```bash
-curl -I "https://github.com/second-state/x402-agent-tools/releases/latest"
+curl -I "https://github.com/second-state/payment-skill/releases/latest"
 ```
 
 ### Unsupported Platform

@@ -7,7 +7,7 @@ A skill for OpenClaw / Claude Code / OpenCode to make and receive payments. Curr
 Send the following message to your agent. It will guide you to setup a wallet if you have not done so.
 
 ```
-Read https://raw.githubusercontent.com/second-state/x402-agent-tools/refs/heads/main/install.md and follow the instructions to set up USDC payments.
+Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install.md and follow the instructions to set up USDC payments.
 ```
 
 ## Overview

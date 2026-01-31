@@ -42,7 +42,7 @@ All tool commands should be run from `~/.claude/skills/payment/skill/scripts/`:
 - `unzip` (for extraction)
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
-https://github.com/second-state/x402-agent-tools/releases
+https://github.com/second-state/payment-skill/releases
 
 Extract to `~/.claude/skills/payment/skill/scripts/`
 
