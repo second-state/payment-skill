@@ -99,7 +99,7 @@ download_binaries() {
 
     # Make binaries executable (not needed on Windows)
     if [[ "$(uname -s)" != MINGW* ]] && [[ "$(uname -s)" != MSYS* ]] && [[ "$(uname -s)" != CYGWIN* ]]; then
-        chmod +x "${SCRIPTS_DIR}"/*
+        find "${SCRIPTS_DIR}" -maxdepth 1 -type f ! -name ".*" -exec chmod +x {} \;
     fi
 
     # Cleanup
