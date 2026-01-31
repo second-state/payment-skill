@@ -1,6 +1,16 @@
 [package]
-name = "create_wallet"
-version = "0.1.0"
-edition = "2024"
+name = "create-wallet"
+version.workspace = true
+edition = "2021"
+authors.workspace = true
+license.workspace = true
+description = "Create a new Ethereum-compatible wallet for x402 payments"
+
+[[bin]]
+name = "create-wallet"
+path = "src/main.rs"
 
 [dependencies]
+x402_common = { path = "../x402-common" }
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"

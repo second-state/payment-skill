@@ -1,6 +1,13 @@
 [package]
 name = "x402curl"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition = "2021"
+authors.workspace = true
+license.workspace = true
+description = "HTTP client with automatic x402 payment handling"
+
+[[bin]]
+name = "x402curl"
+path = "src/main.rs"
 
 [dependencies]
