@@ -11,3 +11,20 @@ name = "pay"
 path = "src/main.rs"
 
 [dependencies]
+x402_common = { path = "../x402-common" }
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+alloy = { version = "1.0", default-features = false, features = [
+    "signers",
+    "signer-local",
+    "providers",
+    "provider-http",
+    "rpc-types",
+    "network",
+    "consensus",
+    "contract",
+    "sol-types",
+    "reqwest-rustls-tls",
+] }
+eth-keystore = "0.5"
+serde_json = "1"
