@@ -58,7 +58,7 @@ Key features:
 
 ### x402-config
 
-Manages configuration for all x402 tools. Stores settings in `~/.x402/config.toml`.
+Manages configuration for all x402 tools. Stores settings in `~/.payment/config.toml`.
 
 ```bash
 x402-config <COMMAND>
@@ -74,10 +74,10 @@ Commands:
 
 ## Personal Data Storage
 
-All personal data is stored in the `~/.x402/` folder:
+All personal data is stored in the `~/.payment/` folder:
 
 ```
-~/.x402/
+~/.payment/
 ├── config.toml      # Network, token, and payment settings
 ├── wallet.json      # Encrypted wallet keystore (Web3 Secret Storage format)
 └── password.txt     # Wallet password (auto-generated, 600 permissions)
@@ -102,11 +102,11 @@ skill/
 
 ### How Installation Works
 
-1. **Clone skill files**: The install script copies the `skill/` directory to `~/.claude/skills/x402/`
+1. **Clone skill files**: The install script copies the `skill/` directory to `~/.claude/skills/payment/`
 
 2. **Bootstrap binaries**: Running `bootstrap.sh` detects your platform (OS + architecture) and downloads the appropriate pre-compiled binaries from GitHub Releases
 
-3. **Binary installation**: Binaries are extracted to `~/.claude/skills/x402/skill/scripts/` and made executable
+3. **Binary installation**: Binaries are extracted to `~/.claude/skills/payment/skill/scripts/` and made executable
 
 Supported platforms:
 - Linux x86_64 / aarch64
@@ -116,7 +116,7 @@ Supported platforms:
 ### Final installed structure
 
 ```
-~/.claude/skills/x402/
+~/.claude/skills/payment/
 └── skill/
     ├── bootstrap.sh
     ├── skill.md

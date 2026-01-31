@@ -66,12 +66,12 @@ x402-config list-keys
 
 ## Configuration File
 
-Configuration is stored in `~/.x402/config.toml`:
+Configuration is stored in `~/.payment/config.toml`:
 
 ```toml
 [wallet]
-path = "~/.x402/wallet.json"
-password_file = "~/.x402/password.txt"
+path = "~/.payment/wallet.json"
+password_file = "~/.payment/password.txt"
 
 [network]
 name = "base-sepolia"

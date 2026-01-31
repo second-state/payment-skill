@@ -318,7 +318,7 @@ mod tests {
     #[test]
     fn test_default_config() {
         let config = Config::default();
-        assert!(config.wallet.path.contains(".x402"));
+        assert!(config.wallet.path.contains(".payment"));
         assert!(config.network.chain_id.is_none());
     }
 

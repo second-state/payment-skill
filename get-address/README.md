@@ -12,7 +12,7 @@ get-address [OPTIONS]
 
 | Option | Short | Description |
 |--------|-------|-------------|
-| `--wallet <PATH>` | `-w` | Path to wallet keystore file (default: `~/.x402/wallet.json`) |
+| `--wallet <PATH>` | `-w` | Path to wallet keystore file (default: `~/.payment/wallet.json`) |
 | `--config <PATH>` | `-c` | Path to configuration file |
 | `--help` | `-h` | Print help information |
 | `--version` | `-V` | Print version |

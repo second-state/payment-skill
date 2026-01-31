@@ -1,6 +1,6 @@
-# x402 Skill Installation Guide
+# Payment Skill Installation Guide
 
-This guide explains how to install the x402 payment skill for Claude agents.
+This guide explains how to install the payment skill for Claude agents.
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ After installation, you MUST configure the network settings before using payment
 ### Step 1: Check if configuration exists
 
 ```bash
-~/.claude/skills/x402/skill/scripts/x402-config show
+~/.claude/skills/payment/skill/scripts/x402-config show
 ```
 
 **If output shows `network.chain_id` and `network.rpc_url` values**, configuration is complete. Skip to "Verify Installation".
@@ -56,12 +56,12 @@ Ask the user:
 Based on user's answer, run:
 
 ```bash
-~/.claude/skills/x402/skill/scripts/x402-config use-network <profile-name>
+~/.claude/skills/payment/skill/scripts/x402-config use-network <profile-name>
 ```
 
 For example:
 ```bash
-~/.claude/skills/x402/skill/scripts/x402-config use-network base-sepolia
+~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
 ```
 
 ### Step 4: Verify configuration
@@ -69,7 +69,7 @@ For example:
 Run show again to confirm:
 
 ```bash
-~/.claude/skills/x402/skill/scripts/x402-config show
+~/.claude/skills/payment/skill/scripts/x402-config show
 ```
 
 Expected output should include:
@@ -83,7 +83,7 @@ rpc_url = "https://sepolia.base.org"
 ### Step 5: Get wallet address
 
 ```bash
-~/.claude/skills/x402/skill/scripts/get-address
+~/.claude/skills/payment/skill/scripts/get-address
 ```
 
 If no wallet exists, one will be created automatically. Tell the user:
@@ -99,7 +99,7 @@ If no wallet exists, one will be created automatically. Tell the user:
 Wallet and configuration are stored separately (persists across reinstalls):
 
 ```
-~/.x402/
+~/.payment/
 ├── config.toml           # Network, token, and payment settings
 ├── wallet.json           # Encrypted wallet keystore
 └── password.txt          # Wallet password (auto-generated)
@@ -116,13 +116,13 @@ If automatic download fails, manually download binaries:
    - `x402-darwin-x86_64.zip`
    - `x402-darwin-aarch64.zip`
    - `x402-windows-x86_64.zip`
-3. Extract to `~/.claude/skills/x402/skill/scripts/`
-4. Make executable: `chmod +x ~/.claude/skills/x402/skill/scripts/*`
+3. Extract to `~/.claude/skills/payment/skill/scripts/`
+4. Make executable: `chmod +x ~/.claude/skills/payment/skill/scripts/*`
 
 ## Verify Installation
 
 ```bash
-~/.claude/skills/x402/skill/scripts/get-address --help
+~/.claude/skills/payment/skill/scripts/get-address --help
 ```
 
 ## Uninstallation

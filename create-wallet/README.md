@@ -22,7 +22,7 @@ create-wallet [OPTIONS]
 |--------|-------------|
 | `--password <PASSWORD>` | Password to encrypt the wallet. If not provided, a secure 32-character password is auto-generated. |
 | `--password-file <PATH>` | Read the password from a file instead of command line. |
-| `-o, --output <PATH>` | Output path for the wallet keystore file. Default: `~/.x402/wallet.json` |
+| `-o, --output <PATH>` | Output path for the wallet keystore file. Default: `~/.payment/wallet.json` |
 | `-f, --force` | Force overwrite if a wallet already exists at the output path. |
 | `-h, --help` | Print help information. |
 | `-V, --version` | Print version information. |
@@ -100,7 +100,7 @@ echo "New wallet address: $ADDRESS"
 
 ### Password handling:
 - If no password is provided, a secure 32-character alphanumeric password is generated
-- Auto-generated passwords are saved to `~/.x402/password.txt` with `600` permissions
+- Auto-generated passwords are saved to `~/.payment/password.txt` with `600` permissions
 - When using `--password`, the password is NOT saved to disk
 
 ## File Format
@@ -162,7 +162,7 @@ A wallet already exists at the default or specified location. Either:
 
 ### "Permission denied"
 
-Ensure you have write permissions to the output directory. The default directory `~/.x402/` is created automatically with proper permissions.
+Ensure you have write permissions to the output directory. The default directory `~/.payment/` is created automatically with proper permissions.
 
 ### Password file issues
 

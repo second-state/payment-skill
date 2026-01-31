@@ -8,24 +8,24 @@ pub use wallet::{Wallet, WalletInfo};
 
 use std::path::PathBuf;
 
-/// Get the default x402 data directory (~/.x402)
+/// Get the default x402 data directory (~/.payment)
 pub fn default_data_dir() -> PathBuf {
     dirs::home_dir()
         .unwrap_or_else(|| PathBuf::from("."))
-        .join(".x402")
+        .join(".payment")
 }
 
-/// Get the default wallet path (~/.x402/wallet.json)
+/// Get the default wallet path (~/.payment/wallet.json)
 pub fn default_wallet_path() -> PathBuf {
     default_data_dir().join("wallet.json")
 }
 
-/// Get the default password file path (~/.x402/password.txt)
+/// Get the default password file path (~/.payment/password.txt)
 pub fn default_password_path() -> PathBuf {
     default_data_dir().join("password.txt")
 }
 
-/// Get the default config path (~/.x402/config.toml)
+/// Get the default config path (~/.payment/config.toml)
 pub fn default_config_path() -> PathBuf {
     default_data_dir().join("config.toml")
 }
