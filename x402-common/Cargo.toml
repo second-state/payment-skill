@@ -29,3 +29,6 @@ dirs = "6"
 
 # Random generation
 rand = "0.8"
+
+[dev-dependencies]
+tempfile = "3"
