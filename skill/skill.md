@@ -97,7 +97,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Options:**
 - `--wallet <PATH>` - Path to keystore file (default: `~/.payment/wallet.json`)
-- `--config <PATH>` - Path to configuration file
+- `--config <PATH>`, `-c <PATH>` - Path to configuration file
 
 **Example:**
 ```bash
