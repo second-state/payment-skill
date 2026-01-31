@@ -1,6 +1,6 @@
 # get-address
 
-Retrieve the public Ethereum address from an x402 wallet.
+Retrieve the public Ethereum address and token balance from a payment wallet.
 
 ## Usage
 
@@ -20,7 +20,7 @@ get-address [OPTIONS]
 ## Examples
 
 ```bash
-# Get address from default wallet location
+# Get address and balance from default wallet location
 get-address
 
 # Get address from specific wallet file
@@ -30,10 +30,36 @@ get-address -w /path/to/wallet.json
 
 ## Output
 
-Prints the Ethereum address (0x-prefixed) to stdout:
+Outputs JSON with the wallet address and token balance (if network is configured):
 
+```json
+{
+  "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f12345",
+  "balance": "1000000",
+  "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "token_symbol": "USDC",
+  "network": "base-sepolia"
+}
 ```
-0x742d35Cc6634C0532925a3b844Bc9e7595f12345
+
+### Output Fields
+
+| Field | Description |
+|-------|-------------|
+| `address` | The wallet's public Ethereum address (always present) |
+| `balance` | Token balance in smallest units (present if network configured) |
+| `token` | ERC-20 token contract address (present if configured) |
+| `token_symbol` | Token symbol, e.g., "USDC" (present if configured) |
+| `network` | Network name, e.g., "base-sepolia" (present if configured) |
+
+### Without Network Configuration
+
+If no network is configured, the output only includes the address:
+
+```json
+{
+  "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f12345"
+}
 ```
 
 ## Security
@@ -48,9 +74,22 @@ Prints the Ethereum address (0x-prefixed) to stdout:
 | Code | Meaning |
 |------|---------|
 | 0 | Success |
-| 12 | Wallet not found |
-| 1 | Other error |
+| 1 | Error (wallet not found, network error, etc.) |
 
 ## How It Works
 
-The wallet keystore file (Web3 Secret Storage format) contains an unencrypted `address` field that stores the public address. This tool simply reads that field without requiring decryption of the private key.
+1. Reads the wallet keystore file (Web3 Secret Storage format) to get the public address
+2. If network and token are configured, queries the blockchain for the token balance
+3. Outputs all information as JSON
+
+## Configuration
+
+The tool uses `~/.payment/config.toml` for default settings:
+
+- `wallet.path` - Default wallet file location
+- `network.rpc_url` - RPC endpoint for balance queries
+- `payment.default_token` - Token contract address for balance queries
+- `payment.default_token_symbol` - Token symbol for display
+- `network.name` - Network name for display
+
+Run `x402-config use-network base-sepolia` to configure the network.

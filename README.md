@@ -30,7 +30,7 @@ Key features:
 
 ### get-address
 
-Retrieves the Ethereum address from an existing wallet without requiring the password. Useful for checking balances or sharing your address.
+Retrieves the Ethereum address and token balance from an existing wallet without requiring the password.
 
 ```bash
 get-address [OPTIONS]
@@ -38,8 +38,9 @@ get-address [OPTIONS]
 
 Key features:
 - Reads address directly from keystore (no decryption needed)
+- Queries current token balance from blockchain (if network configured)
+- Outputs JSON with address, balance, token info, and network
 - Creates a new wallet automatically if none exists
-- Outputs the checksummed address to stdout
 
 ### pay
 
