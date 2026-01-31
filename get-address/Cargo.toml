@@ -1,6 +1,13 @@
 [package]
-name = "get_address"
-version = "0.1.0"
-edition = "2024"
+name = "get-address"
+version.workspace = true
+edition = "2021"
+authors.workspace = true
+license.workspace = true
+description = "Get the public address from an x402 wallet"
+
+[[bin]]
+name = "get-address"
+path = "src/main.rs"
 
 [dependencies]

@@ -1,6 +1,13 @@
 [package]
 name = "pay"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition = "2021"
+authors.workspace = true
+license.workspace = true
+description = "Make token payments from an x402 wallet"
+
+[[bin]]
+name = "pay"
+path = "src/main.rs"
 
 [dependencies]
