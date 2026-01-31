@@ -1,5 +1,0 @@
-#!/bin/bash
-# Bootstrap wrapper for x402-config
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/bootstrap.sh"
-bootstrap_and_run "x402-config" "$@"

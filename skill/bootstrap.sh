@@ -1,6 +1,6 @@
 #!/bin/bash
 # Bootstrap script for x402 tools
-# Downloads platform-specific binaries on first use
+# Downloads and installs platform-specific binaries
 
 set -e
 
@@ -10,7 +10,7 @@ SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
 
 # Detect platform
 detect_platform() {
-    local os arch platform
+    local os arch
 
     # Detect OS
     case "$(uname -s)" in
@@ -80,6 +80,7 @@ download_binaries() {
     zip_file="${temp_dir}/x402-${platform}.zip"
 
     # Download
+    echo "Fetching from: ${url}" >&2
     if command -v curl &>/dev/null; then
         curl -sL -o "$zip_file" "$url"
     else
@@ -87,6 +88,7 @@ download_binaries() {
     fi
 
     # Extract
+    echo "Extracting binaries..." >&2
     if command -v unzip &>/dev/null; then
         unzip -q -o "$zip_file" -d "${SCRIPTS_DIR}"
     else
@@ -96,50 +98,31 @@ download_binaries() {
     fi
 
     # Make binaries executable (not needed on Windows)
-    if [ "$(uname -s)" != "MINGW"* ] && [ "$(uname -s)" != "MSYS"* ] && [ "$(uname -s)" != "CYGWIN"* ]; then
+    if [[ "$(uname -s)" != MINGW* ]] && [[ "$(uname -s)" != MSYS* ]] && [[ "$(uname -s)" != CYGWIN* ]]; then
         chmod +x "${SCRIPTS_DIR}"/*
     fi
 
     # Cleanup
     rm -rf "$temp_dir"
 
-    echo "x402 tools installed successfully." >&2
+    echo "x402 tools installed successfully to ${SCRIPTS_DIR}" >&2
 }
 
-# Main bootstrap function
-# Usage: bootstrap_and_run <tool_name> [args...]
-bootstrap_and_run() {
-    local tool_name="$1"
-    shift
-
+# Main
+main() {
     local platform
-    local binary_path
-    local binary_name
-
     platform=$(detect_platform)
+    echo "Detected platform: ${platform}" >&2
 
-    # Determine binary name (add .exe for Windows)
-    if [[ "$platform" == windows-* ]]; then
-        binary_name="${tool_name}.exe"
-    else
-        binary_name="${tool_name}"
-    fi
+    local download_url
+    download_url=$(get_download_url "$platform")
 
-    binary_path="${SCRIPTS_DIR}/${binary_name}"
+    download_binaries "$platform" "$download_url"
 
-    # Check if binary exists, download if not
-    if [ ! -x "$binary_path" ]; then
-        local download_url
-        download_url=$(get_download_url "$platform")
-        download_binaries "$platform" "$download_url"
-    fi
-
-    # Verify binary exists after download
-    if [ ! -x "$binary_path" ]; then
-        echo "Error: Binary ${binary_name} not found after download." >&2
-        exit 1
-    fi
-
-    # Execute the tool
-    exec "$binary_path" "$@"
+    # List installed binaries
+    echo "" >&2
+    echo "Installed tools:" >&2
+    ls -1 "${SCRIPTS_DIR}" | grep -v '^\.' >&2
 }
+
+main "$@"

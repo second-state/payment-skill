@@ -2,19 +2,42 @@
 
 This skill enables you to handle HTTP 402 (Payment Required) responses by managing an Ethereum-compatible wallet and making blockchain payments.
 
-## Installation
+## IMPORTANT: Bootstrap Before First Use
 
-This skill uses bootstrap scripts that automatically download platform-specific binaries on first use.
+Before using any x402 tool, you MUST check if the binaries are installed and bootstrap if needed.
 
-**Skill location:** `~/.claude/skills/x402/`
+### Step 1: Check if binaries are installed
 
-The bootstrap scripts will:
+```bash
+# Check if the create-wallet binary exists
+ls ~/.claude/skills/x402/skill/scripts/create-wallet
+```
+
+### Step 2: If binaries are missing, run bootstrap
+
+```bash
+# Run bootstrap to download platform-specific binaries
+~/.claude/skills/x402/skill/bootstrap.sh
+```
+
+The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
 3. Extract binaries to `skill/scripts/`
-4. Execute the requested tool
 
-**Requirements:**
+### Step 3: Run tools from scripts directory
+
+All tool commands should be run from `~/.claude/skills/x402/skill/scripts/`:
+
+```bash
+~/.claude/skills/x402/skill/scripts/create-wallet [OPTIONS]
+~/.claude/skills/x402/skill/scripts/get-address [OPTIONS]
+~/.claude/skills/x402/skill/scripts/pay [OPTIONS]
+~/.claude/skills/x402/skill/scripts/x402curl [OPTIONS]
+~/.claude/skills/x402/skill/scripts/x402-config [OPTIONS]
+```
+
+**Requirements for bootstrap:**
 - `curl` or `wget` (for downloading)
 - `unzip` (for extraction)
 
@@ -44,7 +67,7 @@ Creates a new Ethereum-compatible wallet for the agent.
 
 **Usage:**
 ```bash
-create-wallet [OPTIONS]
+~/.claude/skills/x402/skill/scripts/create-wallet [OPTIONS]
 ```
 
 **Options:**
@@ -54,7 +77,7 @@ create-wallet [OPTIONS]
 
 **Example:**
 ```bash
-create-wallet --password-file ~/.x402/password.txt
+~/.claude/skills/x402/skill/scripts/create-wallet --password-file ~/.x402/password.txt
 ```
 
 **Output:** Prints the new wallet's public address to stdout.
@@ -69,7 +92,7 @@ Returns the agent's public Ethereum address.
 
 **Usage:**
 ```bash
-get-address [OPTIONS]
+~/.claude/skills/x402/skill/scripts/get-address [OPTIONS]
 ```
 
 **Options:**
@@ -77,7 +100,7 @@ get-address [OPTIONS]
 
 **Example:**
 ```bash
-get-address
+~/.claude/skills/x402/skill/scripts/get-address
 ```
 
 **Output:** Prints the checksummed Ethereum address (e.g., `0x742d35Cc6634C0532925a3b844Bc9e7595f...`)
@@ -92,7 +115,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Usage:**
 ```bash
-pay --to <ADDRESS> --amount <AMOUNT> --rpc <URL> [OPTIONS]
+~/.claude/skills/x402/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> --rpc <URL> [OPTIONS]
 ```
 
 **Required:**
@@ -112,7 +135,7 @@ pay --to <ADDRESS> --amount <AMOUNT> --rpc <URL> [OPTIONS]
 **Example:**
 ```bash
 # Pay 1000000 units of USDC on Base Sepolia
-pay --to 0x1234...abcd \
+~/.claude/skills/x402/skill/scripts/pay --to 0x1234...abcd \
     --amount 1000000 \
     --token 0x036CbD53842c5426634e7929541eC2318f3dCF7e \
     --rpc https://sepolia.base.org \
@@ -135,7 +158,7 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 
 **Usage:**
 ```bash
-x402curl <URL> [OPTIONS]
+~/.claude/skills/x402/skill/scripts/x402curl <URL> [OPTIONS]
 ```
 
 **Required:**
@@ -155,7 +178,7 @@ x402curl <URL> [OPTIONS]
 **Example:**
 ```bash
 # Access a paid API endpoint
-x402curl https://api.example.com/premium/data \
+~/.claude/skills/x402/skill/scripts/x402curl https://api.example.com/premium/data \
     --rpc https://sepolia.base.org \
     --password-file ~/.x402/password.txt \
     --max-payment 5000000
@@ -197,7 +220,7 @@ Manage x402 configuration settings.
 
 **Usage:**
 ```bash
-x402-config <COMMAND> [OPTIONS]
+~/.claude/skills/x402/skill/scripts/x402-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -209,23 +232,23 @@ x402-config <COMMAND> [OPTIONS]
 **Examples:**
 ```bash
 # View all config
-x402-config show
+~/.claude/skills/x402/skill/scripts/x402-config show
 
 # Set up for Base Sepolia testnet (recommended for testing)
-x402-config use-network base-sepolia
+~/.claude/skills/x402/skill/scripts/x402-config use-network base-sepolia
 
 # Manually configure network
-x402-config set network.name "base-sepolia" \
+~/.claude/skills/x402/skill/scripts/x402-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
 
 # Set default payment token
-x402-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
+~/.claude/skills/x402/skill/scripts/x402-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 
 # Set maximum auto-payment limit
-x402-config set payment.max_auto_payment "5000000"
+~/.claude/skills/x402/skill/scripts/x402-config set payment.max_auto_payment "5000000"
 ```
 
 **Available Network Profiles:**
@@ -293,11 +316,14 @@ When required config is missing, tools output JSON to stderr:
 ### First-Time Setup
 
 ```bash
+# 0. Bootstrap binaries if not already installed
+~/.claude/skills/x402/skill/bootstrap.sh
+
 # 1. Configure the network (easiest: use a profile)
-x402-config use-network base-sepolia
+~/.claude/skills/x402/skill/scripts/x402-config use-network base-sepolia
 
 # 2. Check/create wallet (auto-creates if missing)
-get-address
+~/.claude/skills/x402/skill/scripts/get-address
 # Output: 0x742d35Cc6634C0532925a3b844Bc9e7595f...
 
 # 3. Tell the user: "Fund this address with USDC on Base Sepolia to enable payments"
@@ -307,32 +333,32 @@ get-address
 
 ```bash
 # 1. Attempt operation
-pay --to 0x... --amount 1000000
+~/.claude/skills/x402/skill/scripts/pay --to 0x... --amount 1000000
 
 # 2. If exit code is 10, parse stderr JSON for missing fields
 
 # 3. Ask user: "Which blockchain network should be used? (e.g., base-sepolia, base-mainnet)"
 
 # 4. Save their response
-x402-config set network.name "base-sepolia"
-x402-config use-network base-sepolia
+~/.claude/skills/x402/skill/scripts/x402-config set network.name "base-sepolia"
+~/.claude/skills/x402/skill/scripts/x402-config use-network base-sepolia
 
 # 5. Retry the original operation
-pay --to 0x... --amount 1000000
+~/.claude/skills/x402/skill/scripts/pay --to 0x... --amount 1000000
 ```
 
 ### Making a Direct Payment
 
 ```bash
 # Check your address first (auto-creates wallet if missing)
-get-address
+~/.claude/skills/x402/skill/scripts/get-address
 
 # Pay 1 USDC (6 decimals, so 1000000 = 1 USDC)
 # Uses default token and RPC from config
-pay --to 0xRecipient... --amount 1000000
+~/.claude/skills/x402/skill/scripts/pay --to 0xRecipient... --amount 1000000
 
 # Or specify explicitly
-pay --to 0xRecipient... \
+~/.claude/skills/x402/skill/scripts/pay --to 0xRecipient... \
     --amount 1000000 \
     --token 0xUSDC... \
     --rpc https://sepolia.base.org
@@ -342,7 +368,7 @@ pay --to 0xRecipient... \
 
 ```bash
 # Automatically handle 402 and pay (uses config defaults)
-x402curl https://api.paid-service.com/endpoint \
+~/.claude/skills/x402/skill/scripts/x402curl https://api.paid-service.com/endpoint \
     -X POST \
     -H "Content-Type: application/json" \
     -d '{"query": "data"}'
