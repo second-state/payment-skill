@@ -93,7 +93,7 @@ async fn run(args: Args) -> Result<WalletInfo, Box<dyn std::error::Error>> {
             }
         }
     } else {
-        (None, None, None, config.network.name.clone())
+        (None, None, None, None)
     };
 
     Ok(WalletInfo {
