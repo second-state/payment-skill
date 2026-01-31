@@ -69,9 +69,7 @@ impl Config {
 
     /// Load config from a specific path
     pub fn load_from(path: Option<&Path>) -> Result<Self> {
-        let config_path = path
-            .map(PathBuf::from)
-            .unwrap_or_else(default_config_path);
+        let config_path = path.map(PathBuf::from).unwrap_or_else(default_config_path);
 
         if !config_path.exists() {
             return Ok(Config::default());
@@ -91,9 +89,7 @@ impl Config {
     pub fn save_to(&self, path: Option<&Path>) -> Result<()> {
         ensure_data_dir()?;
 
-        let config_path = path
-            .map(PathBuf::from)
-            .unwrap_or_else(default_config_path);
+        let config_path = path.map(PathBuf::from).unwrap_or_else(default_config_path);
 
         let content = toml::to_string_pretty(self)?;
         fs::write(&config_path, content)?;
