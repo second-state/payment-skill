@@ -1,12 +1,24 @@
+use alloy::primitives::Address;
+use alloy::providers::ProviderBuilder;
+use alloy::sol;
 use clap::Parser;
+use serde::Serialize;
 use std::path::PathBuf;
 use std::process::ExitCode;
 use x402_common::{Config, Wallet};
 
-/// Get the public Ethereum address from an x402 wallet
+// ERC-20 balanceOf function
+sol! {
+    #[sol(rpc)]
+    contract IERC20 {
+        function balanceOf(address account) external view returns (uint256);
+    }
+}
+
+/// Get the public Ethereum address and token balance from a payment wallet
 ///
-/// Reads the wallet keystore file and outputs the public address.
-/// Does NOT require the wallet password as only the address field is read.
+/// Reads the wallet keystore file and outputs JSON with the public address
+/// and current token balance. Does NOT require the wallet password.
 #[derive(Parser, Debug)]
 #[command(name = "get-address")]
 #[command(version, about, long_about = None)]
@@ -20,28 +32,91 @@ struct Args {
     config: Option<PathBuf>,
 }
 
-fn main() -> ExitCode {
+#[derive(Serialize)]
+struct WalletInfo {
+    address: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    balance: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    token_symbol: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    network: Option<String>,
+}
+
+#[tokio::main]
+async fn main() -> ExitCode {
     let args = Args::parse();
 
-    // Load config to get default wallet path if not specified
-    let wallet_path = if let Some(path) = args.wallet {
-        Some(path)
-    } else {
-        // Try to load config for default wallet path
-        match Config::load_from(args.config.as_deref()) {
-            Ok(config) => Some(config.wallet_path()),
-            Err(_) => None, // Use library default
-        }
-    };
-
-    match Wallet::get_address(wallet_path.as_deref()) {
-        Ok(address) => {
-            println!("{}", address);
+    match run(args).await {
+        Ok(info) => {
+            println!("{}", serde_json::to_string_pretty(&info).unwrap());
             ExitCode::SUCCESS
         }
         Err(e) => {
             eprintln!("Error: {}", e);
-            ExitCode::from(e.exit_code() as u8)
+            ExitCode::from(1)
         }
     }
+}
+
+async fn run(args: Args) -> Result<WalletInfo, Box<dyn std::error::Error>> {
+    // Load config
+    let config = Config::load_from(args.config.as_deref()).unwrap_or_default();
+
+    // Get wallet path
+    let wallet_path = args.wallet.unwrap_or_else(|| config.wallet_path());
+
+    // Get address from wallet
+    let address = Wallet::get_address(Some(&wallet_path))?;
+
+    // Try to get balance if network is configured
+    let (balance, token, token_symbol, network) = if let (Some(rpc_url), Some(token_addr)) =
+        (&config.network.rpc_url, &config.payment.default_token)
+    {
+        match get_token_balance(&address, rpc_url, token_addr).await {
+            Ok(bal) => (
+                Some(bal),
+                Some(token_addr.clone()),
+                config.payment.default_token_symbol.clone(),
+                config.network.name.clone(),
+            ),
+            Err(e) => {
+                eprintln!("Warning: Could not fetch balance: {}", e);
+                (
+                    None,
+                    Some(token_addr.clone()),
+                    config.payment.default_token_symbol.clone(),
+                    config.network.name.clone(),
+                )
+            }
+        }
+    } else {
+        (None, None, None, config.network.name.clone())
+    };
+
+    Ok(WalletInfo {
+        address,
+        balance,
+        token,
+        token_symbol,
+        network,
+    })
+}
+
+async fn get_token_balance(
+    address: &str,
+    rpc_url: &str,
+    token_addr: &str,
+) -> Result<String, Box<dyn std::error::Error>> {
+    let wallet_address: Address = address.parse()?;
+    let token_address: Address = token_addr.parse()?;
+
+    let provider = ProviderBuilder::new().connect_http(rpc_url.parse()?);
+
+    let token_contract = IERC20::new(token_address, &provider);
+    let balance = token_contract.balanceOf(wallet_address).call().await?;
+
+    Ok(balance.to_string())
 }

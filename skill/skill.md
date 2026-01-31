@@ -88,7 +88,7 @@ Creates a new Ethereum-compatible wallet for the agent.
 
 ### get-address
 
-Returns the agent's public Ethereum address.
+Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Usage:**
 ```bash
@@ -97,13 +97,30 @@ Returns the agent's public Ethereum address.
 
 **Options:**
 - `--wallet <PATH>` - Path to keystore file (default: `~/.payment/wallet.json`)
+- `--config <PATH>` - Path to configuration file
 
 **Example:**
 ```bash
 ~/.claude/skills/payment/skill/scripts/get-address
 ```
 
-**Output:** Prints the checksummed Ethereum address (e.g., `0x742d35Cc6634C0532925a3b844Bc9e7595f...`)
+**Output:** JSON with address and balance (if network is configured):
+```json
+{
+  "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
+  "balance": "1000000",
+  "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "token_symbol": "USDC",
+  "network": "base-sepolia"
+}
+```
+
+**Fields:**
+- `address` - Public Ethereum address (always present)
+- `balance` - Token balance in smallest units (if network configured)
+- `token` - ERC-20 token contract address (if configured)
+- `token_symbol` - Token symbol, e.g., "USDC" (if configured)
+- `network` - Network name (if configured)
 
 **Security:** This tool NEVER outputs the private key.
 
