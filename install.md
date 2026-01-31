@@ -111,11 +111,11 @@ If automatic download fails, manually download binaries:
 
 1. Go to https://github.com/second-state/payment-skill/releases/latest
 2. Download the zip for your platform:
-   - `x402-linux-x86_64.zip`
-   - `x402-linux-aarch64.zip`
-   - `x402-darwin-x86_64.zip`
-   - `x402-darwin-aarch64.zip`
-   - `x402-windows-x86_64.zip`
+   - `payment-linux-x86_64.zip`
+   - `payment-linux-aarch64.zip`
+   - `payment-darwin-x86_64.zip`
+   - `payment-darwin-aarch64.zip`
+   - `payment-windows-x86_64.zip`
 3. Extract to `~/.claude/skills/payment/skill/scripts/`
 4. Make executable: `chmod +x ~/.claude/skills/payment/skill/scripts/*`
 

@@ -39,7 +39,7 @@ detect_platform() {
 # Get the download URL for the latest release
 get_download_url() {
     local platform="$1"
-    local artifact_name="x402-${platform}.zip"
+    local artifact_name="payment-${platform}.zip"
 
     # Try to get latest release URL using GitHub API
     local api_url="https://api.github.com/repos/${REPO}/releases/latest"
@@ -77,7 +77,7 @@ download_binaries() {
 
     # Create temp directory
     temp_dir=$(mktemp -d)
-    zip_file="${temp_dir}/x402-${platform}.zip"
+    zip_file="${temp_dir}/payment-${platform}.zip"
 
     # Download
     echo "Fetching from: ${url}" >&2
