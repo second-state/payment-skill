@@ -85,7 +85,7 @@ impl Wallet {
         let _uuid = eth_keystore::encrypt_key(
             keystore_dir,
             &mut rng,
-            &private_key_bytes,
+            private_key_bytes,
             &password_str,
             Some(file_name),
         )
