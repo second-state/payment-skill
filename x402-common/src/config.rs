@@ -193,6 +193,121 @@ impl Config {
 
         Ok(())
     }
+
+    /// Get a config value by key path (e.g., "network.rpc_url")
+    pub fn get(&self, key: &str) -> Option<String> {
+        match key {
+            "wallet.path" => Some(self.wallet.path.clone()),
+            "wallet.password_file" => Some(self.wallet.password_file.clone()),
+            "network.name" => self.network.name.clone(),
+            "network.chain_id" => self.network.chain_id.map(|v| v.to_string()),
+            "network.rpc_url" => self.network.rpc_url.clone(),
+            "payment.default_token" => self.payment.default_token.clone(),
+            "payment.default_token_symbol" => self.payment.default_token_symbol.clone(),
+            "payment.default_token_decimals" => {
+                self.payment.default_token_decimals.map(|v| v.to_string())
+            }
+            "payment.max_auto_payment" => self.payment.max_auto_payment.clone(),
+            _ => None,
+        }
+    }
+
+    /// Set a config value by key path (e.g., "network.rpc_url")
+    pub fn set(&mut self, key: &str, value: &str) -> Result<()> {
+        match key {
+            "wallet.path" => self.wallet.path = value.to_string(),
+            "wallet.password_file" => self.wallet.password_file = value.to_string(),
+            "network.name" => self.network.name = Some(value.to_string()),
+            "network.chain_id" => {
+                let chain_id = value
+                    .parse::<u64>()
+                    .map_err(|_| Error::Config(format!("Invalid chain_id: {}", value)))?;
+                self.network.chain_id = Some(chain_id);
+            }
+            "network.rpc_url" => self.network.rpc_url = Some(value.to_string()),
+            "payment.default_token" => self.payment.default_token = Some(value.to_string()),
+            "payment.default_token_symbol" => {
+                self.payment.default_token_symbol = Some(value.to_string())
+            }
+            "payment.default_token_decimals" => {
+                let decimals = value
+                    .parse::<u8>()
+                    .map_err(|_| Error::Config(format!("Invalid decimals: {}", value)))?;
+                self.payment.default_token_decimals = Some(decimals);
+            }
+            "payment.max_auto_payment" => self.payment.max_auto_payment = Some(value.to_string()),
+            _ => return Err(Error::Config(format!("Unknown config key: {}", key))),
+        }
+        Ok(())
+    }
+
+    /// Get list of all valid config keys
+    pub fn valid_keys() -> &'static [&'static str] {
+        &[
+            "wallet.path",
+            "wallet.password_file",
+            "network.name",
+            "network.chain_id",
+            "network.rpc_url",
+            "payment.default_token",
+            "payment.default_token_symbol",
+            "payment.default_token_decimals",
+            "payment.max_auto_payment",
+        ]
+    }
+
+    /// Check if network configuration is complete for making payments
+    pub fn check_network_config(&self) -> std::result::Result<(), MissingConfigPrompt> {
+        let mut missing_fields = Vec::new();
+
+        if self.network.rpc_url.is_none() {
+            missing_fields.push("network.rpc_url".to_string());
+        }
+        if self.network.chain_id.is_none() {
+            missing_fields.push("network.chain_id".to_string());
+        }
+
+        if missing_fields.is_empty() {
+            Ok(())
+        } else {
+            Err(MissingConfigPrompt {
+                error: "missing_config".to_string(),
+                missing_fields,
+                prompt: "Configuration is incomplete. Please configure the network settings."
+                    .to_string(),
+                questions: vec![ConfigQuestion {
+                    field: "network".to_string(),
+                    question: "Which blockchain network should be used for payments?".to_string(),
+                    examples: vec![
+                        "base-sepolia".to_string(),
+                        "base-mainnet".to_string(),
+                        "ethereum-mainnet".to_string(),
+                    ],
+                    default: Some("base-sepolia".to_string()),
+                }],
+                hint: "Run: x402-config use-network <network-name>".to_string(),
+            })
+        }
+    }
+}
+
+/// Structured prompt for missing configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MissingConfigPrompt {
+    pub error: String,
+    pub missing_fields: Vec<String>,
+    pub prompt: String,
+    pub questions: Vec<ConfigQuestion>,
+    pub hint: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ConfigQuestion {
+    pub field: String,
+    pub question: String,
+    pub examples: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default: Option<String>,
 }
 
 #[cfg(test)]

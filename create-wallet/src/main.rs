@@ -1,8 +1,8 @@
-use anyhow::Result;
 use clap::Parser;
 use std::fs;
 use std::path::PathBuf;
-use x402_common::{default_password_path, default_wallet_path, Wallet};
+use std::process::ExitCode;
+use x402_common::{Config, Wallet};
 
 /// Create a new Ethereum-compatible wallet for x402 payments
 #[derive(Parser, Debug)]
@@ -22,16 +22,33 @@ struct Args {
     #[arg(long, short = 'o')]
     output: Option<PathBuf>,
 
+    /// Path to configuration file
+    #[arg(long, short = 'c')]
+    config: Option<PathBuf>,
+
     /// Force overwrite if wallet already exists
     #[arg(long, short = 'f')]
     force: bool,
 }
 
-fn main() -> Result<()> {
+fn main() -> ExitCode {
     let args = Args::parse();
 
-    // Determine the wallet output path
-    let wallet_path = args.output.clone().unwrap_or_else(default_wallet_path);
+    match run(args) {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            ExitCode::from(e.exit_code() as u8)
+        }
+    }
+}
+
+fn run(args: Args) -> x402_common::Result<()> {
+    // Load config for default paths
+    let config = Config::load_from(args.config.as_deref())?;
+
+    // Determine the wallet output path (CLI arg > config > default)
+    let wallet_path = args.output.unwrap_or_else(|| config.wallet_path());
 
     // Check if wallet already exists
     if wallet_path.exists() {
@@ -43,7 +60,9 @@ fn main() -> Result<()> {
                 "Error: Wallet already exists at {}\nUse --force to overwrite.",
                 wallet_path.display()
             );
-            std::process::exit(1);
+            return Err(x402_common::Error::WalletExists(
+                wallet_path.display().to_string(),
+            ));
         }
     }
 
@@ -57,8 +76,9 @@ fn main() -> Result<()> {
     let password_str = args.password.as_deref().or(password_from_file.as_deref());
 
     // Determine where to save the password file (only used if password is auto-generated)
+    // Use config's password_file path
     let password_save_path = if password_str.is_none() {
-        Some(default_password_path())
+        Some(config.password_path())
     } else {
         None
     };
@@ -77,11 +97,8 @@ fn main() -> Result<()> {
     eprintln!("Wallet created successfully!");
     eprintln!("Keystore: {}", info.path.display());
 
-    if password_str.is_none() {
-        eprintln!(
-            "Password saved to: {}",
-            password_save_path.unwrap().display()
-        );
+    if let Some(pw_path) = password_save_path {
+        eprintln!("Password saved to: {}", pw_path.display());
         eprintln!("\nIMPORTANT: Keep your password file secure!");
     }
 

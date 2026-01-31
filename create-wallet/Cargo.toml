@@ -13,4 +13,3 @@ path = "src/main.rs"
 [dependencies]
 x402_common = { path = "../x402-common" }
 clap = { version = "4", features = ["derive"] }
-anyhow = "1"
