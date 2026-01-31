@@ -1,6 +1,6 @@
-# x402 Agent Tools
+# Payment skill for AI agents
 
-A collection of CLI tools enabling Claude agents to make cryptocurrency payments using the x402 payment protocol.
+A skill for OpenClaw / Claude Code / OpenCode to make and receive payments. Currently supports USDC payments on the Base chain.
 
 ## Installation
 
