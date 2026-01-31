@@ -85,7 +85,7 @@ The bootstrap scripts require:
 
 ```bash
 # Test that wrapper scripts work
-~/.claude/skills/x402/get-address --help
+~/.claude/skills/x402/skill/scripts/get-address --help
 ```
 
 ## Uninstallation
