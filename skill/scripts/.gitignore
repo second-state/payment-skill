@@ -1,0 +1,4 @@
+# Ignore downloaded binaries (they are downloaded on first use)
+*
+!.gitignore
+!.gitkeep

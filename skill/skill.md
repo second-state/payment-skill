@@ -2,6 +2,27 @@
 
 This skill enables you to handle HTTP 402 (Payment Required) responses by managing an Ethereum-compatible wallet and making blockchain payments.
 
+## Installation
+
+This skill uses bootstrap scripts that automatically download platform-specific binaries on first use.
+
+**Skill location:** `~/.claude/skills/x402/`
+
+The bootstrap scripts will:
+1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
+2. Download the appropriate binary package from GitHub releases
+3. Extract binaries to `skill/scripts/`
+4. Execute the requested tool
+
+**Requirements:**
+- `curl` or `wget` (for downloading)
+- `unzip` (for extraction)
+
+**Manual download:** If automatic download fails, download the appropriate zip from:
+https://github.com/second-state/x402-agent-tools/releases
+
+Extract to `~/.claude/skills/x402/skill/scripts/`
+
 ## Overview
 
 The x402 protocol allows services to request payment via HTTP 402 responses. This skill provides tools to:
