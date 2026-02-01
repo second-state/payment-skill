@@ -80,6 +80,24 @@ impl Config {
         Ok(config)
     }
 
+    /// Load config or create default with base-sepolia network if it doesn't exist
+    pub fn load_or_create_default(path: Option<&Path>) -> Result<Self> {
+        let config_path = path.map(PathBuf::from).unwrap_or_else(default_config_path);
+
+        if config_path.exists() {
+            let content = fs::read_to_string(&config_path)?;
+            let config: Config = toml::from_str(&content)?;
+            return Ok(config);
+        }
+
+        // Create default config with base-sepolia network
+        let mut config = Config::default();
+        config.apply_network_profile("base-sepolia")?;
+        config.save_to(Some(&config_path))?;
+
+        Ok(config)
+    }
+
     /// Save config to the default path
     pub fn save(&self) -> Result<()> {
         self.save_to(None)

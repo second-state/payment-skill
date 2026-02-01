@@ -44,8 +44,8 @@ fn main() -> ExitCode {
 }
 
 fn run(args: Args) -> x402_common::Result<()> {
-    // Load config for default paths
-    let config = Config::load_from(args.config.as_deref())?;
+    // Load config or create default with base-sepolia if it doesn't exist
+    let config = Config::load_or_create_default(args.config.as_deref())?;
 
     // Determine the wallet output path (CLI arg > config > default)
     let wallet_path = args.output.unwrap_or_else(|| config.wallet_path());
