@@ -108,8 +108,37 @@ download_binaries() {
     echo "x402 tools installed successfully to ${SCRIPTS_DIR}" >&2
 }
 
+# Ensure config file exists
+ensure_config() {
+    local config_dir="${HOME}/.payment"
+    local config_file="${config_dir}/config.toml"
+    local default_config="${SCRIPT_DIR}/config-default.toml"
+
+    if [ ! -f "$config_file" ]; then
+        echo "Creating default config at ${config_file}..." >&2
+
+        # Create directory if it doesn't exist
+        if [ ! -d "$config_dir" ]; then
+            mkdir -p "$config_dir"
+            chmod 700 "$config_dir"
+        fi
+
+        # Copy default config
+        if [ -f "$default_config" ]; then
+            cp "$default_config" "$config_file"
+            chmod 600 "$config_file"
+            echo "Default config created (base-mainnet with USDC)" >&2
+        else
+            echo "Warning: Default config not found at ${default_config}" >&2
+        fi
+    fi
+}
+
 # Main
 main() {
+    # Ensure config exists before anything else
+    ensure_config
+
     local platform
     platform=$(detect_platform)
     echo "Detected platform: ${platform}" >&2
