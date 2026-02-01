@@ -1,3 +1,8 @@
+---
+name: payment
+description: Make and receive USDC payments on Base/Ethereum blockchain. Use when user asks to pay, get paid, check wallet balance, or handle HTTP 402 responses.
+---
+
 # Payment Skill
 
 This skill enables you to request and accept payments through USDC on the blockchain.
