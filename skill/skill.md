@@ -142,7 +142,7 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 **Example:**
 ```bash
 # Access a paid API endpoint, auto-pay up to 5 USDC
-~/.claude/skills/payment/skill/scripts/x402curl http://localhost:8000/pay/<payment-id> \
+~/.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
     --max-payment 5
 ```
 
