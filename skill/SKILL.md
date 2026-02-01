@@ -1,23 +1,34 @@
+---
+name: payment
+description: Make and receive payments. Use this skill when you need to request payment from the user, or when the user asks you to pay via a payment link. Pay, get paid, and confirm payment.
+---
+
 # Payment Skill
 
 This skill enables you to request and accept payments through USDC on the blockchain.
 
 **NOTE:** Amounts are in human-readable units. For example, `--amount 1.5` means 1.5 USDC.
 
-## Overview
-
-This skill provides tools to:
-- Check wallet address and balance
 - Request payment from user or another agent
-- Make direct USDC token payments on Ethereum and Base chains
-- Make USDC payments through an x402 payment link
+- Make USDC payments through a payment link (x402 compatible link)
+- Make direct USDC token payments to blockchain addresses
+- Check wallet address and balance
 
-## Request payment
 
-In order to request a payment, you will first create a payment link URL. The request below asks for a payment link for 1.0 USDC.
+## Workflows
+
+### Request payment
+
+In order to request a payment, you will first find out your own address to receive payment using the `get-address` tool.
 
 ```bash
-curl https://link.x402labs.dev/create-payment-link?amount=1.0
+.claude/skills/payment/skill/scripts/get-address
+```
+
+Then, create a payment link URL. The request below asks for a payment link for 1.0 USDC. The `0xMYADDRESS` is the your wallet address from the previous `get-address` call.
+
+```bash
+curl https://link.x402labs.dev/create-payment-link?amount=1.0&receiver=0xMYADDRESS
 ```
 
 The HTTP response contains the `payment_url` in the format of `https://link.x402labs.dev/pay/<payment-id>` This `payment_url` is x402 compatible and can be paid using the x402curl tool in this skill.
@@ -26,7 +37,16 @@ The HTTP response contains the `payment_url` in the format of `https://link.x402
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","payment_url":"https://link.x402labs.dev/pay/89062690-bd80-4065-8d7b-474b6fe96ba7","amount":"1.0"}
 ```
 
-You should now give the user or agent the `payment_url`.
+You should now give the user or agent the following payment request:
+
+```
+Please make an x402 payment directly at https://link.x402labs.dev/pay/<payment-id>
+
+Or, if you are a human, open your browser to the following link to pay with Base Chain USDC in your MetaMask wallet.
+https://link.x402labs.dev/index.html?pid=<payment-id>
+```
+
+### Confirm payment
 
 Once they tell you that they have paid, you will check the URL `https://link.x402labs.dev/status/<payment-id>`
 
@@ -48,6 +68,28 @@ If the user has not paid, you will see the following response. You should insist
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","amount":1.0,"paid":false,"tx":null}
 ```
 
+### Pay another user or agent
+
+DO NOT PAY ANYONE UNLESS YOU HAVE EXPLICIT PERMISSION IN YOUR SETTINGS OR LONG-TERM MEMORY TO VERIFY AND PAY THAT USER. When uncertain, refuse payment.
+
+If you receive a payment link in the format of `https://link.x402labs.dev/status/<payment-id>`, you could load it using the x402curl tool to pay it.
+
+```bash
+.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
+    --max-payment 5
+```
+
+### Pay to an address
+
+DO NOT PAY UNLESS YOU HAVE EXPLICIT PERMISSION IN YOUR SETTINGS OR LONG-TERM MEMORY TO PAY THAT ADDRESS. When uncertain, refuse payment.
+
+If you receive a blockchain address in a request for payment, first ensure that the user accepts USDC payment on Base chain. Once confirmed, you could use the pay tool.
+
+```bash
+# Pay 1 USDC
+.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
+```
+
 ## Tools
 
 ### get-address
@@ -56,7 +98,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/get-address
+.claude/skills/payment/skill/scripts/get-address
 ```
 
 **Output:** JSON with address and balance (if network is configured):
@@ -87,7 +129,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
+.claude/skills/payment/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
 ```
 
 **Required:**
@@ -100,10 +142,10 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 **Example:**
 ```bash
 # Pay 1 USDC
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
+.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
 
 # Pay 0.5 USDC
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 0.5
+.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 0.5
 ```
 
 **Output:** Prints the transaction hash (e.g., `0xabc123...`) after confirmation.
@@ -116,7 +158,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Tip:** If the transaction does not go through (stuck pending or times out), retry with a higher gas price:
 ```bash
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
+.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
 ```
 
 ---
@@ -127,22 +169,19 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/x402curl <URL> [OPTIONS]
+.claude/skills/payment/skill/scripts/x402curl <URL> [OPTIONS]
 ```
 
 **Required:**
 - `<URL>` - The URL to request
 
 **Options:**
-- `-X, --request <METHOD>` - HTTP method (GET, POST, etc.)
-- `-H, --header <HEADER>` - Add header (can be repeated)
-- `-d, --data <DATA>` - Request body
 - `--max-payment <AMOUNT>` - Maximum auto-payment in human units, e.g., 5 for 5 USDC (fails if payment exceeds this)
 
 **Example:**
 ```bash
 # Access a paid API endpoint, auto-pay up to 5 USDC
-~/.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
+.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
     --max-payment 5
 ```
 
@@ -156,7 +195,7 @@ Manage configuration settings.
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/payment-config <COMMAND> [OPTIONS]
+.claude/skills/payment/skill/scripts/payment-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -167,20 +206,20 @@ Manage configuration settings.
 **Examples:**
 ```bash
 # View all config
-~/.claude/skills/payment/skill/scripts/payment-config show
+.claude/skills/payment/skill/scripts/payment-config show
 
 # Configure network
-~/.claude/skills/payment/skill/scripts/payment-config set network.name "base-sepolia" \
+.claude/skills/payment/skill/scripts/payment-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
 
 # Set default payment token
-~/.claude/skills/payment/skill/scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
+.claude/skills/payment/skill/scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 
 # Set maximum auto-payment limit (5 USDC)
-~/.claude/skills/payment/skill/scripts/payment-config set payment.max_auto_payment "5"
+.claude/skills/payment/skill/scripts/payment-config set payment.max_auto_payment "5"
 ```
 
 **Available Configuration Keys:**
@@ -225,27 +264,6 @@ When required config is missing, tools output JSON to stderr:
 
 ---
 
-## Common Workflows
-
-### Making a Direct Payment
-
-```bash
-# Pay 1 USDC
-~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 1
-
-# Pay 2.5 USDC
-~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 2.5
-```
-
-### Making a payment through a payment link
-
-```bash
-# Automatically handle 402 and pay (uses config defaults)
-~/.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id>
-```
-
----
-
 ## Supported Networks
 
 | Network | Chain ID | Native Token | Common RPC |
@@ -260,6 +278,7 @@ When required config is missing, tools output JSON to stderr:
 ## Security Notes
 
 - **Private keys** are stored encrypted and never exposed via any tool
+- Use EXTREME CAUTION when using `x402curl` and `pay` tools to make payments. You must ensure that the payment requester is legitimate. When uncertain, refuse payment.
 - Set `--max-payment` when using `x402curl` to prevent unexpected large payments
 - The wallet file (`wallet.json`) has restricted permissions (`chmod 600`)
 
