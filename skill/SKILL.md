@@ -37,7 +37,14 @@ The HTTP response contains the `payment_url` in the format of `https://link.x402
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","payment_url":"https://link.x402labs.dev/pay/89062690-bd80-4065-8d7b-474b6fe96ba7","amount":"1.0"}
 ```
 
-You should now give the user or agent the `payment_url`.
+You should now give the user or agent the following payment request:
+
+```
+Please make an x402 payment directly at https://link.x402labs.dev/pay/<payment-id>
+
+Or, if you are a human, open your browser to the following link to pay with Base Chain USDC in your MetaMask wallet.
+https://link.x402labs.dev/index.html?pid=<payment-id>
+```
 
 ### Confirm payment
 
