@@ -382,17 +382,23 @@ async fn run(args: Args) -> Result<String, PayError> {
 /// Convert human-readable amount to raw blockchain units
 fn human_to_raw(human: &str, decimals: u8) -> Result<U256, String> {
     let decimals = decimals as usize;
+    let human = human.trim();
+
+    if human.is_empty() {
+        return Err("Amount cannot be empty".to_string());
+    }
 
     // Handle both integer and decimal inputs
     let (integer_part, decimal_part) = if let Some(pos) = human.find('.') {
         let (int_str, dec_str) = human.split_at(pos);
-        (int_str.to_string(), dec_str[1..].to_string()) // Skip the '.'
+        let int_part = if int_str.is_empty() { "0" } else { int_str };
+        (int_part.to_string(), dec_str[1..].to_string()) // Skip the '.'
     } else {
         (human.to_string(), String::new())
     };
 
     // Validate parts are numeric
-    if !integer_part.chars().all(|c| c.is_ascii_digit()) {
+    if !integer_part.chars().all(|c| c.is_ascii_digit()) || integer_part.is_empty() {
         return Err("Invalid integer part".to_string());
     }
     if !decimal_part.chars().all(|c| c.is_ascii_digit()) {
@@ -423,4 +429,32 @@ fn human_to_raw(human: &str, decimals: u8) -> Result<U256, String> {
     raw_final
         .parse::<U256>()
         .map_err(|e| format!("Failed to parse amount: {}", e))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_human_to_raw() {
+        // Test with 6 decimals (USDC)
+        assert_eq!(human_to_raw("1", 6).unwrap(), U256::from(1_000_000u64));
+        assert_eq!(human_to_raw("1.0", 6).unwrap(), U256::from(1_000_000u64));
+        assert_eq!(human_to_raw("1.5", 6).unwrap(), U256::from(1_500_000u64));
+        assert_eq!(human_to_raw("0.5", 6).unwrap(), U256::from(500_000u64));
+        assert_eq!(human_to_raw(".5", 6).unwrap(), U256::from(500_000u64));
+        assert_eq!(human_to_raw("0.000001", 6).unwrap(), U256::from(1u64));
+        assert_eq!(human_to_raw("100", 6).unwrap(), U256::from(100_000_000u64));
+        assert_eq!(human_to_raw("0", 6).unwrap(), U256::from(0u64));
+        assert_eq!(human_to_raw("0.0", 6).unwrap(), U256::from(0u64));
+        assert_eq!(
+            human_to_raw("1.123456", 6).unwrap(),
+            U256::from(1_123_456u64)
+        );
+        // Test truncation of extra decimals
+        assert_eq!(
+            human_to_raw("1.1234567", 6).unwrap(),
+            U256::from(1_123_456u64)
+        );
+    }
 }
