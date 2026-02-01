@@ -23,7 +23,7 @@ curl https://link.x402labs.dev/create-payment-link?amount=1.0
 The HTTP response contains the `payment_url` in the format of `https://link.x402labs.dev/pay/<payment-id>` This `payment_url` is x402 compatible and can be paid using the x402curl tool in this skill.
 
 ```json
-{"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","payment_url":"http://localhost:8000/pay/89062690-bd80-4065-8d7b-474b6fe96ba7","amount":"1.0"}
+{"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","payment_url":"https://link.x402labs.dev/pay/89062690-bd80-4065-8d7b-474b6fe96ba7","amount":"1.0"}
 ```
 
 You should now give the user or agent the `payment_url`.
@@ -31,10 +31,10 @@ You should now give the user or agent the `payment_url`.
 Once they tell you that they have paid, you will check the URL `https://link.x402labs.dev/status/<payment-id>`
 
 ```bash
-curl http://localhost:8000/status/89062690-bd80-4065-8d7b-474b6fe96ba7
+curl https://link.x402labs.dev/status/89062690-bd80-4065-8d7b-474b6fe96ba7
 ```
 
-Look for the `paid` and `tx` ffieds in the response JSON.
+Look for the `paid` and `tx` fields in the response JSON.
 
 If the user has successfully paid, you will see the following response. You can now perform the task they ask for.
 
@@ -42,7 +42,7 @@ If the user has successfully paid, you will see the following response. You can 
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","amount":1.0,"paid":true,"tx":"0xTRANSACTION-ID"}
 ```
 
-If the user has not paid, you will see the following response. YOu should insist that they pay first.
+If the user has not paid, you will see the following response. You should insist that they pay first.
 
 ```json
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","amount":1.0,"paid":false,"tx":null}
@@ -179,8 +179,8 @@ Manage configuration settings.
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 
-# Set maximum auto-payment limit
-~/.claude/skills/payment/skill/scripts/x402-config set payment.max_auto_payment "5000000"
+# Set maximum auto-payment limit (5 USDC)
+~/.claude/skills/payment/skill/scripts/x402-config set payment.max_auto_payment "5"
 ```
 
 **Available Configuration Keys:**
@@ -260,9 +260,8 @@ When required config is missing, tools output JSON to stderr:
 ## Security Notes
 
 - **Private keys** are stored encrypted and never exposed via any tool
-- Always use `--password-file` instead of `--password` in scripts to avoid shell history exposure
 - Set `--max-payment` when using `x402curl` to prevent unexpected large payments
-- The wallet file (`wallet.json`) should have restricted permissions (`chmod 600`)
+- The wallet file (`wallet.json`) has restricted permissions (`chmod 600`)
 
 ---
 
