@@ -39,8 +39,8 @@ Output:
 ```
 0x742d35Cc6634C0532925a3b844Bc9e7595f...
 Wallet created successfully!
-Keystore: /home/user/.x402/wallet.json
-Password saved to: /home/user/.x402/password.txt
+Keystore: /home/user/.payment/wallet.json
+Password saved to: /home/user/.payment/password.txt
 
 IMPORTANT: Keep your password file secure!
 

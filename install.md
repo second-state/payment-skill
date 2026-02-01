@@ -13,7 +13,7 @@ The bootstrap script requires:
 ## Quick Install (Recommended)
 
 ```bash
-SKILL_DIR="${HOME}/.claude/skills/x402"
+SKILL_DIR="${HOME}/.claude/skills/payment"
 mkdir -p "$(dirname "$SKILL_DIR")"
 
 # Clone the skill directory
@@ -27,31 +27,17 @@ rm -rf /tmp/payment-skill-repo
 
 ## Post Install: Configuration
 
-After installation, you MUST configure the network settings before using payment tools.
+After installation, configure the network and wallet.
 
-### Step 1: Check if configuration exists
+### Step 1: Configure network
 
-```bash
-~/.claude/skills/payment/skill/scripts/x402-config show
-```
+Ask the user which network to use:
 
-**If output shows `network.chain_id` and `network.rpc_url` values**, configuration is complete. Skip to "Verify Installation".
-
-**If network section is empty**, proceed to Step 2.
-
-### Step 2: Ask user which network to use
-
-Ask the user:
-
-> "Which blockchain network should I use for x402 payments?"
+> "Which blockchain network should I use for payments?"
 >
 > Options:
 > - **base-sepolia** (recommended for testing) - Base testnet
 > - **base-mainnet** - Base mainnet (real funds)
-> - **ethereum-sepolia** - Ethereum testnet
-> - **ethereum-mainnet** - Ethereum mainnet (real funds)
-
-### Step 3: Apply the network profile
 
 Based on user's answer, run:
 
@@ -64,33 +50,47 @@ For example:
 ~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
 ```
 
-### Step 4: Verify configuration
-
-Run show again to confirm:
+### Step 2: Create wallet
 
 ```bash
-~/.claude/skills/payment/skill/scripts/x402-config show
+~/.claude/skills/payment/skill/scripts/create-wallet
 ```
 
-Expected output should include:
-```
-[network]
-name = "base-sepolia"
-chain_id = 84532
-rpc_url = "https://sepolia.base.org"
-```
+**If error "Wallet already exists"**: Ignore and proceed to Step 3.
 
-### Step 5: Get wallet address
+**If successful**: A new wallet is created.
+
+### Step 3: Get wallet address and balance
 
 ```bash
 ~/.claude/skills/payment/skill/scripts/get-address
 ```
 
-If no wallet exists, one will be created automatically. Tell the user:
+This outputs JSON with the wallet address and current balance:
 
-> "Your x402 wallet address is: `<address>`
+```json
+{
+  "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
+  "balance": "0",
+  "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "token_symbol": "USDC",
+  "network": "base-sepolia"
+}
+```
+
+### Step 4: Ask user to fund the wallet
+
+Show the user the address and balance, then ask them to fund it:
+
+> "Your payment wallet address is: `<address>`
 >
-> Please fund this address with tokens on `<network-name>` to enable payments."
+> Current USDC balance: `<balance>`
+>
+> To enable payments, please fund this address on `<network>` with:
+> - **USDC** - for making payments
+> - **ETH** (0.001 ETH) - for gas fees
+>
+> You can get testnet tokens from faucets if using base-sepolia."
 
 ---
 
@@ -129,10 +129,10 @@ If automatic download fails, manually download binaries:
 
 ```bash
 # Remove skill
-rm -rf "${HOME}/.claude/skills/x402"
+rm -rf "${HOME}/.claude/skills/payment"
 
 # Optionally remove wallet data (CAUTION: deletes wallet!)
-# rm -rf "${HOME}/.x402"
+# rm -rf "${HOME}/.payment"
 ```
 
 ## Troubleshooting

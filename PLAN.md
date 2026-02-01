@@ -48,7 +48,7 @@ x402_skill/
 
 **Inputs**:
 - `--password <PASSWORD>` (optional): Password to encrypt the wallet keystore
-- `--output <PATH>` (optional): Path to store the encrypted keystore (default: `~/.x402/wallet.json`)
+- `--output <PATH>` (optional): Path to store the encrypted keystore (default: `~/.payment/wallet.json`)
 
 **Outputs**:
 - Creates encrypted keystore file
@@ -73,7 +73,7 @@ x402_skill/
 **Purpose**: Retrieve the agent's public Ethereum address from the stored wallet.
 
 **Inputs**:
-- `--wallet <PATH>` (optional): Path to keystore file (default: `~/.x402/wallet.json`)
+- `--wallet <PATH>` (optional): Path to keystore file (default: `~/.payment/wallet.json`)
 
 **Outputs**:
 - Prints the public address (0x-prefixed, checksummed) to stdout
@@ -177,7 +177,7 @@ x402_skill/
 
 Consider creating a shared library crate (`x402-common`) for:
 - Wallet loading/decryption
-- Configuration file handling (`~/.x402/config.toml`)
+- Configuration file handling (`~/.payment/config.toml`)
 - Common types and error handling
 - Auto-initialization logic
 
@@ -185,12 +185,12 @@ Consider creating a shared library crate (`x402-common`) for:
 
 ## Configuration
 
-Default config location: `~/.x402/config.toml`
+Default config location: `~/.payment/config.toml`
 
 ```toml
 [wallet]
-path = "~/.x402/wallet.json"
-password_file = "~/.x402/password.txt"
+path = "~/.payment/wallet.json"
+password_file = "~/.payment/password.txt"
 
 [network]
 # Default blockchain network
@@ -300,7 +300,7 @@ x402-config init
 ```
 
 **Behavior:**
-- Creates `~/.x402/` directory if it doesn't exist
+- Creates `~/.payment/` directory if it doesn't exist
 - Creates `config.toml` if it doesn't exist
 - Validates values where possible (e.g., chain_id is numeric, rpc_url is valid URL)
 
