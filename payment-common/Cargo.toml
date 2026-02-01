@@ -1,10 +1,10 @@
 [package]
-name = "x402_common"
+name = "payment_common"
 version.workspace = true
 edition = "2021"
 authors.workspace = true
 license.workspace = true
-description = "Shared utilities for x402 payment tools"
+description = "Shared utilities for payment tools"
 
 [dependencies]
 # Ethereum - use rustls for static builds

@@ -32,7 +32,7 @@ Payment skill for AI agents (Claude Code, OpenClaw, OpenCode) to make and receiv
 
 ## Directory Structure
 
-- `x402-common/` - Shared library (config, wallet, errors)
+- `payment-common/` - Shared library (config, wallet, errors)
 - `create-wallet/` - Wallet creation tool
 - `get-address/` - Get wallet address and balance
 - `pay/` - Make payments

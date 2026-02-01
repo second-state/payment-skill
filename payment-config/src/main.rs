@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
+use payment_common::config::NETWORK_PROFILES;
+use payment_common::Config;
 use std::process::ExitCode;
-use x402_common::config::NETWORK_PROFILES;
-use x402_common::Config;
 
 /// Configuration management for x402 tools
 #[derive(Parser, Debug)]
@@ -55,7 +55,7 @@ fn main() -> ExitCode {
     }
 }
 
-fn run(args: Args) -> x402_common::Result<()> {
+fn run(args: Args) -> payment_common::Result<()> {
     match args.command {
         Commands::Show => cmd_show(),
         Commands::Get { key } => cmd_get(&key),
@@ -66,7 +66,7 @@ fn run(args: Args) -> x402_common::Result<()> {
     }
 }
 
-fn cmd_show() -> x402_common::Result<()> {
+fn cmd_show() -> payment_common::Result<()> {
     let config = Config::load()?;
 
     println!("[wallet]");
@@ -103,7 +103,7 @@ fn cmd_show() -> x402_common::Result<()> {
     Ok(())
 }
 
-fn cmd_get(key: &str) -> x402_common::Result<()> {
+fn cmd_get(key: &str) -> payment_common::Result<()> {
     let config = Config::load()?;
 
     match config.get(key) {
@@ -117,7 +117,7 @@ fn cmd_get(key: &str) -> x402_common::Result<()> {
                 // Key is valid but not set - output nothing (empty)
                 Ok(())
             } else {
-                Err(x402_common::Error::Config(format!(
+                Err(payment_common::Error::Config(format!(
                     "Unknown config key: {}",
                     key
                 )))
@@ -126,9 +126,9 @@ fn cmd_get(key: &str) -> x402_common::Result<()> {
     }
 }
 
-fn cmd_set(pairs: &[String]) -> x402_common::Result<()> {
+fn cmd_set(pairs: &[String]) -> payment_common::Result<()> {
     if !pairs.len().is_multiple_of(2) {
-        return Err(x402_common::Error::InvalidArgument(
+        return Err(payment_common::Error::InvalidArgument(
             "Arguments must be key-value pairs".to_string(),
         ));
     }
@@ -148,7 +148,7 @@ fn cmd_set(pairs: &[String]) -> x402_common::Result<()> {
     Ok(())
 }
 
-fn cmd_use_network(profile: &str) -> x402_common::Result<()> {
+fn cmd_use_network(profile: &str) -> payment_common::Result<()> {
     let mut config = Config::load()?;
     config.apply_network_profile(profile)?;
     config.save()?;
@@ -191,7 +191,7 @@ fn cmd_use_network(profile: &str) -> x402_common::Result<()> {
     Ok(())
 }
 
-fn cmd_list_networks() -> x402_common::Result<()> {
+fn cmd_list_networks() -> payment_common::Result<()> {
     println!("Available network profiles:");
     println!();
     for profile in NETWORK_PROFILES {
@@ -214,7 +214,7 @@ fn cmd_list_networks() -> x402_common::Result<()> {
     Ok(())
 }
 
-fn cmd_list_keys() -> x402_common::Result<()> {
+fn cmd_list_keys() -> payment_common::Result<()> {
     println!("Valid configuration keys:");
     println!();
     for key in Config::valid_keys() {

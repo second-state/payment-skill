@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "x402-common",
+    "payment-common",
     "payment-config",
     "create-wallet",
     "get-address",

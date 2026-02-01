@@ -134,7 +134,7 @@ This is a Rust workspace with the following crates:
 
 | Crate | Description |
 |-------|-------------|
-| `x402-common` | Shared library for configuration, errors, and utilities |
+| `payment-common` | Shared library for configuration, errors, and utilities |
 | `create-wallet` | Wallet creation CLI |
 | `get-address` | Address retrieval CLI |
 | `pay` | Token payment CLI |
