@@ -30,7 +30,10 @@ fn generate_code(payment_url: &str, max_payment: Option<f64>) -> String {
     };
 
     format!(
-        r#"import {{ createX402Client }} from "x402-client";
+        r#"To complete this payment, run the following JavaScript code:
+
+```javascript
+import {{ createX402Client }} from "x402-client";
 import {{ readFileSync }} from "fs";
 import {{ homedir }} from "os";
 import {{ join }} from "path";
@@ -57,7 +60,15 @@ console.log("Response body:", await response.text());
 const paymentHeader = response.headers.get("x-payment-response");
 if (paymentHeader) {{
   console.log("Decoded payment response:", client.decodePaymentResponse(paymentHeader));
-}}"#,
+}}
+```
+
+Save this code to a file (e.g., `payment.mjs`) and run it with Node.js:
+```bash
+node payment.mjs
+```
+
+Note: Requires the `x402-client` package. Install with: `npm install x402-client`"#,
         payment_url, max_payment_line
     )
 }
