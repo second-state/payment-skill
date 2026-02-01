@@ -215,17 +215,13 @@ Manage x402 configuration settings.
 - `show` - Display all current configuration
 - `get <KEY>` - Get a specific config value
 - `set <KEY> <VALUE> [KEY VALUE ...]` - Set one or more config values
-- `use-network <PROFILE>` - Apply a predefined network profile
 
 **Examples:**
 ```bash
 # View all config
 ~/.claude/skills/payment/skill/scripts/x402-config show
 
-# Set up for Base Sepolia testnet (recommended for testing)
-~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
-
-# Manually configure network
+# Configure network
 ~/.claude/skills/payment/skill/scripts/x402-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
@@ -252,15 +248,6 @@ Manage x402 configuration settings.
 | `payment.default_token_symbol` | Token symbol (e.g., "USDC") |
 | `payment.default_token_decimals` | Token decimals (e.g., 6 for USDC) |
 | `payment.max_auto_payment` | Maximum auto-payment amount |
-
-**Available Network Profiles:**
-
-| Profile | Chain ID | Description |
-|---------|----------|-------------|
-| `base-sepolia` | 84532 | Base testnet (recommended for testing) |
-| `base-mainnet` | 8453 | Base mainnet |
-| `ethereum-sepolia` | 11155111 | Ethereum testnet |
-| `ethereum-mainnet` | 1 | Ethereum mainnet |
 
 ---
 
