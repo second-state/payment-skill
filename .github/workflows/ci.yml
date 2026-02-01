@@ -106,9 +106,30 @@ jobs:
       - name: Verify static linking (Linux)
         if: matrix.use_cross
         run: |
+          echo "=== Checking binary type ==="
           file target/${{ matrix.target }}/release/create-wallet
-          # Verify it's statically linked (should show "statically linked")
-          file target/${{ matrix.target }}/release/create-wallet | grep -i static || echo "Warning: May not be fully static"
+
+          echo "=== Verifying static linking ==="
+          # The binary should be "statically linked" or "static-pie linked" - fail if not
+          file target/${{ matrix.target }}/release/create-wallet | grep -qE "(statically linked|static-pie linked)" || {
+            echo "ERROR: Binary is not statically linked!"
+            exit 1
+          }
+
+          echo "=== Checking for dynamic dependencies ==="
+          # ldd should show "statically linked", "not a dynamic executable", or fail for cross-compiled binaries
+          LDD_OUTPUT=$(ldd target/${{ matrix.target }}/release/create-wallet 2>&1) || true
+          if echo "$LDD_OUTPUT" | grep -qE "(statically linked|not a dynamic executable)"; then
+            echo "SUCCESS: No dynamic dependencies"
+            echo "$LDD_OUTPUT"
+          elif echo "$LDD_OUTPUT" | grep -qE "(cannot execute|wrong ELF class|cannot open)"; then
+            echo "SUCCESS: Cross-compiled binary (ldd cannot analyze, but file confirmed static linking)"
+            echo "$LDD_OUTPUT"
+          else
+            echo "ERROR: Binary has dynamic dependencies:"
+            echo "$LDD_OUTPUT"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -240,8 +261,29 @@ jobs:
       - name: Verify static linking (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
+          echo "=== Checking binary type ==="
           file ./create-wallet
-          ldd ./create-wallet 2>&1 || echo "Binary is statically linked (no dynamic dependencies)"
+
+          echo "=== Verifying no libc dependency ==="
+          # The binary should be "statically linked" or "static-pie linked"
+          file ./create-wallet | grep -qE "(statically linked|static-pie linked)" || {
+            echo "ERROR: Binary is not statically linked!"
+            file ./create-wallet
+            exit 1
+          }
+
+          # Verify ldd shows no dynamic dependencies
+          LDD_OUTPUT=$(ldd ./create-wallet 2>&1)
+          if echo "$LDD_OUTPUT" | grep -qE "(statically linked|not a dynamic executable)"; then
+            echo "SUCCESS: Binary has no dynamic dependencies (including libc)"
+            echo "$LDD_OUTPUT"
+          else
+            echo "ERROR: Binary has dynamic dependencies:"
+            echo "$LDD_OUTPUT"
+            exit 1
+          fi
+
+          echo "=== All binaries verified as fully static ==="
 
       - name: Extract and verify (Windows)
         if: matrix.os == 'windows-latest'
