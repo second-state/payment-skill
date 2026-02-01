@@ -117,14 +117,14 @@ jobs:
           }
 
           echo "=== Checking for dynamic dependencies ==="
-          # ldd should fail or show "not a dynamic executable"
-          if ldd target/${{ matrix.target }}/release/create-wallet 2>&1 | grep -q "not a dynamic executable"; then
+          # ldd should show "statically linked", "not a dynamic executable", or fail
+          LDD_OUTPUT=$(ldd target/${{ matrix.target }}/release/create-wallet 2>&1)
+          if echo "$LDD_OUTPUT" | grep -qE "(statically linked|not a dynamic executable)"; then
             echo "SUCCESS: No dynamic dependencies"
-          elif ldd target/${{ matrix.target }}/release/create-wallet 2>&1 | grep -q "No such file"; then
-            echo "SUCCESS: No dynamic dependencies (ldd cannot process static binary)"
+            echo "$LDD_OUTPUT"
           else
             echo "ERROR: Binary has dynamic dependencies:"
-            ldd target/${{ matrix.target }}/release/create-wallet 2>&1
+            echo "$LDD_OUTPUT"
             exit 1
           fi
 
@@ -270,11 +270,13 @@ jobs:
           }
 
           # Verify ldd shows no dynamic dependencies
-          if ldd ./create-wallet 2>&1 | grep -q "not a dynamic executable"; then
+          LDD_OUTPUT=$(ldd ./create-wallet 2>&1)
+          if echo "$LDD_OUTPUT" | grep -qE "(statically linked|not a dynamic executable)"; then
             echo "SUCCESS: Binary has no dynamic dependencies (including libc)"
+            echo "$LDD_OUTPUT"
           else
             echo "ERROR: Binary has dynamic dependencies:"
-            ldd ./create-wallet 2>&1
+            echo "$LDD_OUTPUT"
             exit 1
           fi
 
