@@ -1,6 +1,13 @@
 # Payment Skill
 
-This skill enables you to handle HTTP 402 (Payment Required) responses by managing an Ethereum-compatible wallet and making blockchain payments.
+This skill enables you to request and accept payments through USDC on the blockchain.
+
+**IMPORTANT NOTE:** 1 USDC == 1000000 amount of tokens. When the user asks you to send or receive USDC, you should always multiply the given value by 1000000 and then use that multiplied number as the `--amount` argument when calling tools.
+
+For example:
+- User says "send 5 USDC" → use `--amount 5000000`
+- User says "send 0.5 USDC" → use `--amount 500000`
+- User says "send 100 USDC" → use `--amount 100000000`
 
 ## IMPORTANT: Bootstrap Before First Use
 
