@@ -56,6 +56,10 @@ struct Args {
     #[arg(long)]
     chain_id: Option<u64>,
 
+    /// Gas price in Gwei (auto-detected from network if not specified)
+    #[arg(long)]
+    gas_price: Option<f64>,
+
     /// Path to configuration file
     #[arg(long, short = 'c')]
     config: Option<PathBuf>,
@@ -246,6 +250,21 @@ async fn run(args: Args) -> Result<String, PayError> {
         }
     }
 
+    // Get gas price (CLI override or fetch from network)
+    let gas_price_wei: u128 = if let Some(gwei) = args.gas_price {
+        // Convert Gwei to Wei (1 Gwei = 10^9 Wei)
+        let wei = (gwei * 1_000_000_000.0) as u128;
+        eprintln!("Using gas price: {} Gwei", gwei);
+        wei
+    } else {
+        let price = provider
+            .get_gas_price()
+            .await
+            .map_err(|e| PayError::NetworkError(format!("Failed to get gas price: {}", e)))?;
+        eprintln!("Network gas price: {} Gwei", price / 1_000_000_000);
+        price
+    };
+
     // Send transaction
     let tx_hash = if let Some(token_addr) = token_address {
         // ERC-20 transfer
@@ -266,8 +285,10 @@ async fn run(args: Args) -> Result<String, PayError> {
             )));
         }
 
-        // Send transfer transaction
-        let tx = token_contract.transfer(to_address, amount);
+        // Send transfer transaction with gas price
+        let tx = token_contract
+            .transfer(to_address, amount)
+            .gas_price(gas_price_wei);
         let pending_tx = tx.send().await.map_err(|e| {
             PayError::TransactionFailed(format!("Failed to send transaction: {}", e))
         })?;
@@ -304,14 +325,8 @@ async fn run(args: Args) -> Result<String, PayError> {
             .await
             .map_err(|e| PayError::NetworkError(format!("Failed to get balance: {}", e)))?;
 
-        // Estimate gas
-        let gas_price = provider
-            .get_gas_price()
-            .await
-            .map_err(|e| PayError::NetworkError(format!("Failed to get gas price: {}", e)))?;
-
         let gas_limit = U256::from(21000); // Standard ETH transfer gas
-        let total_cost = amount + (gas_limit * U256::from(gas_price));
+        let total_cost = amount + (gas_limit * U256::from(gas_price_wei));
 
         if balance < total_cost {
             return Err(PayError::InsufficientBalance(format!(
@@ -320,10 +335,11 @@ async fn run(args: Args) -> Result<String, PayError> {
             )));
         }
 
-        // Build and send transaction
+        // Build and send transaction with gas price
         let tx = alloy::rpc::types::TransactionRequest::default()
             .with_to(to_address)
-            .with_value(amount);
+            .with_value(amount)
+            .with_gas_price(gas_price_wei);
 
         let pending_tx = provider.send_transaction(tx).await.map_err(|e| {
             PayError::TransactionFailed(format!("Failed to send transaction: {}", e))

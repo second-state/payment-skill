@@ -118,6 +118,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 - `--password <PASSWORD>` - Wallet password
 - `--password-file <PATH>` - Read password from file
 - `--chain-id <ID>` - Chain ID (auto-detected if omitted)
+- `--gas-price <GWEI>` - Gas price in Gwei (auto-detected from network if omitted)
 - `--no-wait` - Don't wait for confirmation (returns immediately after broadcast)
 
 **Example:**
