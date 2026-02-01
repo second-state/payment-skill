@@ -9,8 +9,8 @@ Before using any payment tool, you MUST check if the binaries are installed and 
 ### Step 1: Check if binaries are installed
 
 ```bash
-# Check if the create-wallet binary exists
-ls ~/.claude/skills/payment/skill/scripts/create-wallet
+# Check if the get-address binary exists
+ls ~/.claude/skills/payment/skill/scripts/get-address
 ```
 
 ### Step 2: If binaries are missing, run bootstrap
@@ -30,7 +30,6 @@ The bootstrap script will:
 All tool commands should be run from `~/.claude/skills/payment/skill/scripts/`:
 
 ```bash
-~/.claude/skills/payment/skill/scripts/create-wallet [OPTIONS]
 ~/.claude/skills/payment/skill/scripts/get-address [OPTIONS]
 ~/.claude/skills/payment/skill/scripts/pay [OPTIONS]
 ~/.claude/skills/payment/skill/scripts/x402curl [OPTIONS]
@@ -49,42 +48,15 @@ Extract to `~/.claude/skills/payment/skill/scripts/`
 ## Overview
 
 The x402 protocol allows services to request payment via HTTP 402 responses. This skill provides tools to:
-- Create and manage an Ethereum wallet
+- Check wallet address and balance
 - Make token payments on EVM-compatible chains
 - Automatically handle 402 responses with payment and retry
 
-## Important: Auto-Initialization
-
-**Wallet**: If no wallet exists when a tool needs one, a new wallet is **automatically created**. The public address is printed to stderr. You must inform the user of this address so they can fund it.
+## Important: Missing Configuration Handling
 
 **Configuration**: If required config is missing, tools exit with code `10` and output a JSON prompt to stderr. You must ask the user for the missing values and save them using `x402-config set`.
 
 ## Tools
-
-### create-wallet
-
-Creates a new Ethereum-compatible wallet for the agent.
-
-**Usage:**
-```bash
-~/.claude/skills/payment/skill/scripts/create-wallet [OPTIONS]
-```
-
-**Options:**
-- `--password <PASSWORD>` - Password to encrypt the wallet (prompted if not provided)
-- `--password-file <PATH>` - Read password from file
-- `--output <PATH>` - Output path for keystore (default: `~/.payment/wallet.json`)
-
-**Example:**
-```bash
-~/.claude/skills/payment/skill/scripts/create-wallet --password-file ~/.payment/password.txt
-```
-
-**Output:** Prints the new wallet's public address to stdout.
-
-**Note:** Only create a wallet once. Check if one exists first using `get-address`.
-
----
 
 ### get-address
 
@@ -109,9 +81,9 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 {
   "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
   "balance": "1000000",
-  "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
   "token_symbol": "USDC",
-  "network": "base-sepolia"
+  "network": "base-mainnet"
 }
 ```
 
@@ -268,6 +240,20 @@ Manage x402 configuration settings.
 ~/.claude/skills/payment/skill/scripts/x402-config set payment.max_auto_payment "5000000"
 ```
 
+**Available Configuration Keys:**
+
+| Key | Description |
+|-----|-------------|
+| `wallet.path` | Path to wallet keystore file |
+| `wallet.password_file` | Path to password file |
+| `network.name` | Network name (e.g., "base-mainnet") |
+| `network.chain_id` | Chain ID for transaction signing |
+| `network.rpc_url` | Blockchain RPC endpoint URL |
+| `payment.default_token` | Default ERC-20 token contract address |
+| `payment.default_token_symbol` | Token symbol (e.g., "USDC") |
+| `payment.default_token_decimals` | Token decimals (e.g., 6 for USDC) |
+| `payment.max_auto_payment` | Maximum auto-payment amount |
+
 **Available Network Profiles:**
 
 | Profile | Chain ID | Description |
@@ -289,15 +275,14 @@ path = "~/.payment/wallet.json"
 password_file = "~/.payment/password.txt"
 
 [network]
-name = "base-sepolia"
-chain_id = 84532
-rpc_url = "https://sepolia.base.org"
+name = "base-mainnet"
+chain_id = 8453
+rpc_url = "https://mainnet.base.org"
 
 [payment]
-default_token = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+default_token = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
 default_token_symbol = "USDC"
 default_token_decimals = 6
-max_auto_payment = "5000000"
 ```
 
 ### Required Configuration
@@ -330,22 +315,6 @@ When required config is missing, tools output JSON to stderr:
 
 ## Common Workflows
 
-### First-Time Setup
-
-```bash
-# 0. Bootstrap binaries if not already installed
-~/.claude/skills/payment/skill/bootstrap.sh
-
-# 1. Configure the network (easiest: use a profile)
-~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
-
-# 2. Check/create wallet (auto-creates if missing)
-~/.claude/skills/payment/skill/scripts/get-address
-# Output: 0x742d35Cc6634C0532925a3b844Bc9e7595f...
-
-# 3. Tell the user: "Fund this address with USDC on Base Sepolia to enable payments"
-```
-
 ### Handling Missing Config (Agent Workflow)
 
 ```bash
@@ -367,9 +336,6 @@ When required config is missing, tools output JSON to stderr:
 ### Making a Direct Payment
 
 ```bash
-# Check your address first (auto-creates wallet if missing)
-~/.claude/skills/payment/skill/scripts/get-address
-
 # Pay 1 USDC (6 decimals, so 1000000 = 1 USDC)
 # Uses default token and RPC from config
 ~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 1000000
@@ -377,8 +343,8 @@ When required config is missing, tools output JSON to stderr:
 # Or specify explicitly
 ~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... \
     --amount 1000000 \
-    --token 0xUSDC... \
-    --rpc https://sepolia.base.org
+    --token 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 \
+    --rpc https://mainnet.base.org
 ```
 
 ### Accessing Paid APIs
