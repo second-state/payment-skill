@@ -119,14 +119,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 - `--amount <AMOUNT>` - Amount to send (in token's smallest unit, e.g., wei for ETH)
 
 **Options:**
-- `--token <ADDRESS>` - ERC-20 token contract address (uses config default, omit for native ETH/gas token)
-- `--rpc <URL>` - Ethereum JSON-RPC endpoint (uses config default)
-- `--wallet <PATH>` - Path to keystore (default: `~/.payment/wallet.json`)
-- `--password <PASSWORD>` - Wallet password
-- `--password-file <PATH>` - Read password from file
-- `--chain-id <ID>` - Chain ID (auto-detected if omitted)
 - `--gas-price <GWEI>` - Gas price in Gwei (auto-detected from network if omitted)
-- `--no-wait` - Don't wait for confirmation (returns immediately after broadcast)
 
 **Example:**
 ```bash
