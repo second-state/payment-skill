@@ -182,11 +182,18 @@ async fn run(args: Args) -> Result<String, PayError> {
         PayError::InvalidArgument(format!("Invalid recipient address: {}", args.to))
     })?;
 
-    // Parse amount
-    let amount: U256 = args
-        .amount
-        .parse()
-        .map_err(|_| PayError::InvalidArgument(format!("Invalid amount: {}", args.amount)))?;
+    // Get decimals (default to 6 for USDC)
+    let decimals = config.payment.default_token_decimals.unwrap_or(6);
+
+    // Parse amount (human-readable) and convert to blockchain units
+    let amount: U256 = human_to_raw(&args.amount, decimals).map_err(|e| {
+        PayError::InvalidArgument(format!("Invalid amount '{}': {}", args.amount, e))
+    })?;
+
+    eprintln!(
+        "Amount: {} (raw: {} with {} decimals)",
+        args.amount, amount, decimals
+    );
 
     // Get token address (CLI > config default)
     let token_address: Option<Address> =
@@ -370,4 +377,50 @@ async fn run(args: Args) -> Result<String, PayError> {
     };
 
     Ok(tx_hash)
+}
+
+/// Convert human-readable amount to raw blockchain units
+fn human_to_raw(human: &str, decimals: u8) -> Result<U256, String> {
+    let decimals = decimals as usize;
+
+    // Handle both integer and decimal inputs
+    let (integer_part, decimal_part) = if let Some(pos) = human.find('.') {
+        let (int_str, dec_str) = human.split_at(pos);
+        (int_str.to_string(), dec_str[1..].to_string()) // Skip the '.'
+    } else {
+        (human.to_string(), String::new())
+    };
+
+    // Validate parts are numeric
+    if !integer_part.chars().all(|c| c.is_ascii_digit()) {
+        return Err("Invalid integer part".to_string());
+    }
+    if !decimal_part.chars().all(|c| c.is_ascii_digit()) {
+        return Err("Invalid decimal part".to_string());
+    }
+
+    // Pad or truncate decimal part to match decimals
+    let decimal_padded = if decimal_part.len() < decimals {
+        format!("{:0<width$}", decimal_part, width = decimals)
+    } else if decimal_part.len() > decimals {
+        // Truncate (could also error here)
+        decimal_part[..decimals].to_string()
+    } else {
+        decimal_part
+    };
+
+    // Combine integer and decimal parts
+    let raw_str = format!("{}{}", integer_part, decimal_padded);
+
+    // Remove leading zeros but keep at least one digit
+    let raw_trimmed = raw_str.trim_start_matches('0');
+    let raw_final = if raw_trimmed.is_empty() {
+        "0"
+    } else {
+        raw_trimmed
+    };
+
+    raw_final
+        .parse::<U256>()
+        .map_err(|e| format!("Failed to parse amount: {}", e))
 }

@@ -77,11 +77,14 @@ async fn run(args: Args) -> Result<WalletInfo, Box<dyn std::error::Error>> {
     // Get address from wallet
     let address = Wallet::get_address(Some(&wallet_path))?;
 
+    // Get decimals (default to 6 for USDC)
+    let decimals = config.payment.default_token_decimals.unwrap_or(6);
+
     // Try to get balance if network is configured
     let (balance, token, token_symbol, network) = if let (Some(rpc_url), Some(token_addr)) =
         (&config.network.rpc_url, &config.payment.default_token)
     {
-        match get_token_balance(&address, rpc_url, token_addr).await {
+        match get_token_balance(&address, rpc_url, token_addr, decimals).await {
             Ok(bal) => (
                 Some(bal),
                 Some(token_addr.clone()),
@@ -115,6 +118,7 @@ async fn get_token_balance(
     address: &str,
     rpc_url: &str,
     token_addr: &str,
+    decimals: u8,
 ) -> Result<String, Box<dyn std::error::Error>> {
     let wallet_address: Address = address.parse()?;
     let token_address: Address = token_addr.parse()?;
@@ -122,7 +126,34 @@ async fn get_token_balance(
     let provider = ProviderBuilder::new().connect_http(rpc_url.parse()?);
 
     let token_contract = IERC20::new(token_address, &provider);
-    let balance = token_contract.balanceOf(wallet_address).call().await?;
+    let balance_raw = token_contract.balanceOf(wallet_address).call().await?;
 
-    Ok(balance.to_string())
+    // Convert to human-readable units
+    let balance_str = balance_raw.to_string();
+    let human_balance = raw_to_human(&balance_str, decimals);
+
+    Ok(human_balance)
+}
+
+/// Convert raw blockchain units to human-readable units
+fn raw_to_human(raw: &str, decimals: u8) -> String {
+    let decimals = decimals as usize;
+
+    // Pad with leading zeros if needed
+    let padded = if raw.len() <= decimals {
+        format!("{:0>width$}", raw, width = decimals + 1)
+    } else {
+        raw.to_string()
+    };
+
+    let (integer_part, decimal_part) = padded.split_at(padded.len() - decimals);
+
+    // Remove trailing zeros from decimal part
+    let decimal_trimmed = decimal_part.trim_end_matches('0');
+
+    if decimal_trimmed.is_empty() {
+        integer_part.to_string()
+    } else {
+        format!("{}.{}", integer_part, decimal_trimmed)
+    }
 }

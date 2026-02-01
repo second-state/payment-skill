@@ -2,12 +2,7 @@
 
 This skill enables you to request and accept payments through USDC on the blockchain.
 
-**IMPORTANT NOTE:** 1 USDC == 1000000 amount of tokens. When the user asks you to send or receive USDC, you should always multiply the given value by 1000000 and then use that multiplied number as the `--amount` argument when calling tools.
-
-For example:
-- User says "send 5 USDC" → use `--amount 5000000`
-- User says "send 0.5 USDC" → use `--amount 500000`
-- User says "send 100 USDC" → use `--amount 100000000`
+**NOTE:** Amounts are in human-readable units. For example, `--amount 1.5` means 1.5 USDC.
 
 ## Overview
 
@@ -44,7 +39,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 ```json
 {
   "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
-  "balance": "1000000",
+  "balance": "1.5",
   "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
   "token_symbol": "USDC",
   "network": "base-mainnet"
@@ -53,7 +48,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Fields:**
 - `address` - Public Ethereum address (always present)
-- `balance` - Token balance in smallest units (if network configured)
+- `balance` - Token balance in human-readable units, e.g., "1.5" for 1.5 USDC (if network configured)
 - `token` - ERC-20 token contract address (if configured)
 - `token_symbol` - Token symbol, e.g., "USDC" (if configured)
 - `network` - Network name (if configured)
@@ -73,15 +68,18 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Required:**
 - `--to <ADDRESS>` - Recipient Ethereum address
-- `--amount <AMOUNT>` - Amount to send (in token's smallest unit, e.g., wei for ETH)
+- `--amount <AMOUNT>` - Amount to send in human-readable units (e.g., 1.5 for 1.5 USDC)
 
 **Options:**
 - `--gas-price <GWEI>` - Gas price in Gwei (auto-detected from network if omitted)
 
 **Example:**
 ```bash
-# Pay 1 USDC (uses token and RPC from config)
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1000000
+# Pay 1 USDC
+~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
+
+# Pay 0.5 USDC
+~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 0.5
 ```
 
 **Output:** Prints the transaction hash (e.g., `0xabc123...`) after confirmation.
@@ -94,7 +92,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Tip:** If the transaction does not go through (stuck pending or times out), retry with a higher gas price:
 ```bash
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1000000 --gas-price 0.5
+~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
 ```
 
 ---
@@ -262,32 +260,27 @@ When required config is missing, tools output JSON to stderr:
 
 ```bash
 # 1. Attempt operation
-~/.claude/skills/payment/skill/scripts/pay --to 0x... --amount 1000000
+~/.claude/skills/payment/skill/scripts/pay --to 0x... --amount 1
 
 # 2. If exit code is 10, parse stderr JSON for missing fields
 
 # 3. Ask user: "Which blockchain network should be used? (e.g., base-sepolia, base-mainnet)"
 
 # 4. Save their response
-~/.claude/skills/payment/skill/scripts/x402-config set network.name "base-sepolia"
-~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
+~/.claude/skills/payment/skill/scripts/x402-config set network.name "base-mainnet"
 
 # 5. Retry the original operation
-~/.claude/skills/payment/skill/scripts/pay --to 0x... --amount 1000000
+~/.claude/skills/payment/skill/scripts/pay --to 0x... --amount 1
 ```
 
 ### Making a Direct Payment
 
 ```bash
-# Pay 1 USDC (6 decimals, so 1000000 = 1 USDC)
-# Uses default token and RPC from config
-~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 1000000
+# Pay 1 USDC
+~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 1
 
-# Or specify explicitly
-~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... \
-    --amount 1000000 \
-    --token 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 \
-    --rpc https://mainnet.base.org
+# Pay 2.5 USDC
+~/.claude/skills/payment/skill/scripts/pay --to 0xRecipient... --amount 2.5
 ```
 
 ### Accessing Paid APIs
