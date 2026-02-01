@@ -2,7 +2,7 @@ use clap::Parser;
 use std::fs;
 use std::path::PathBuf;
 use std::process::ExitCode;
-use x402_common::{Config, Wallet};
+use x402_common::{default_config_path, Config, Wallet};
 
 /// Create a new Ethereum-compatible wallet for x402 payments
 #[derive(Parser, Debug)]
@@ -44,8 +44,21 @@ fn main() -> ExitCode {
 }
 
 fn run(args: Args) -> x402_common::Result<()> {
-    // Load config or create default with base-sepolia if it doesn't exist
-    let config = Config::load_or_create_default(args.config.as_deref())?;
+    // Check if config file exists
+    let config_path = args.config.clone().unwrap_or_else(default_config_path);
+
+    if !config_path.exists() {
+        eprintln!(
+            "Missing the {} file. Please create one using:\n  x402-config use-network base-sepolia",
+            config_path.display()
+        );
+        return Err(x402_common::Error::MissingConfig(
+            config_path.display().to_string(),
+        ));
+    }
+
+    // Load config
+    let config = Config::load_from(args.config.as_deref())?;
 
     // Determine the wallet output path (CLI arg > config > default)
     let wallet_path = args.output.unwrap_or_else(|| config.wallet_path());
