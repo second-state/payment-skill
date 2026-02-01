@@ -135,6 +135,11 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 - `2` - Transaction failed
 - `3` - Network error
 
+**Tip:** If the transaction does not go through (stuck pending or times out), retry with a higher gas price:
+```bash
+~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1000000 --gas-price 0.5
+```
+
 ---
 
 ### x402curl
