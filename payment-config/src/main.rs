@@ -3,7 +3,7 @@ use payment_common::config::NETWORK_PROFILES;
 use payment_common::Config;
 use std::process::ExitCode;
 
-/// Configuration management for x402 tools
+/// Configuration management for payment tools
 #[derive(Parser, Debug)]
 #[command(name = "payment-config")]
 #[command(version, about, long_about = None)]
