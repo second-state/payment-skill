@@ -110,8 +110,8 @@ jobs:
           file target/${{ matrix.target }}/release/create-wallet
 
           echo "=== Verifying static linking ==="
-          # The binary should be "statically linked" - fail if not
-          file target/${{ matrix.target }}/release/create-wallet | grep -q "statically linked" || {
+          # The binary should be "statically linked" or "static-pie linked" - fail if not
+          file target/${{ matrix.target }}/release/create-wallet | grep -qE "(statically linked|static-pie linked)" || {
             echo "ERROR: Binary is not statically linked!"
             exit 1
           }
@@ -262,8 +262,8 @@ jobs:
           file ./create-wallet
 
           echo "=== Verifying no libc dependency ==="
-          # The binary should be statically linked with no dynamic dependencies
-          file ./create-wallet | grep -q "statically linked" || {
+          # The binary should be "statically linked" or "static-pie linked"
+          file ./create-wallet | grep -qE "(statically linked|static-pie linked)" || {
             echo "ERROR: Binary is not statically linked!"
             file ./create-wallet
             exit 1
