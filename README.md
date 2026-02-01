@@ -93,7 +93,7 @@ The `skill/` directory contains everything needed for Claude agents to use x402 
 ```
 skill/
 ├── bootstrap.sh     # Downloads platform-specific binaries on first run
-├── skill.md         # Instructions for Claude on how to use the tools
+├── SKILL.md         # Instructions for Claude on how to use the tools
 └── scripts/         # CLI binaries installed here by bootstrap.sh
     ├── create-wallet
     ├── get-address
@@ -120,7 +120,7 @@ Supported platforms:
 ~/.claude/skills/payment/
 └── skill/
     ├── bootstrap.sh
-    ├── skill.md
+    ├── SKILL.md
     └── scripts/
         ├── create-wallet
         ├── get-address
