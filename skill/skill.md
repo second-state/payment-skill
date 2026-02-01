@@ -150,13 +150,13 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 
 ---
 
-### x402-config
+### payment-config
 
 Manage configuration settings.
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/x402-config <COMMAND> [OPTIONS]
+~/.claude/skills/payment/skill/scripts/payment-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -167,20 +167,20 @@ Manage configuration settings.
 **Examples:**
 ```bash
 # View all config
-~/.claude/skills/payment/skill/scripts/x402-config show
+~/.claude/skills/payment/skill/scripts/payment-config show
 
 # Configure network
-~/.claude/skills/payment/skill/scripts/x402-config set network.name "base-sepolia" \
+~/.claude/skills/payment/skill/scripts/payment-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
 
 # Set default payment token
-~/.claude/skills/payment/skill/scripts/x402-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
+~/.claude/skills/payment/skill/scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 
 # Set maximum auto-payment limit (5 USDC)
-~/.claude/skills/payment/skill/scripts/x402-config set payment.max_auto_payment "5"
+~/.claude/skills/payment/skill/scripts/payment-config set payment.max_auto_payment "5"
 ```
 
 **Available Configuration Keys:**
@@ -221,7 +221,7 @@ When required config is missing, tools output JSON to stderr:
 }
 ```
 
-**Your responsibility**: Parse this, ask the user, then run `x402-config set` with their answers.
+**Your responsibility**: Parse this, ask the user, then run `payment-config set` with their answers.
 
 ---
 
@@ -269,7 +269,7 @@ When required config is missing, tools output JSON to stderr:
 
 ### Binary tools not found
 
-If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, x402-config), run the bootstrap script to download them:
+If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, payment-config), run the bootstrap script to download them:
 
 ```bash
 ~/.claude/skills/payment/skill/bootstrap.sh

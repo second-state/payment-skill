@@ -134,7 +134,7 @@ async fn run(args: Args) -> Result<String, PayError> {
             serde_json::to_string_pretty(&prompt).map_err(|e| PayError::Other(e.to_string()))?;
         eprintln!("{}", json);
         return Err(PayError::MissingConfig(
-            "Network configuration is incomplete. Run: x402-config use-network <network-name>"
+            "Network configuration is incomplete. Run: payment-config use-network <network-name>"
                 .to_string(),
         ));
     }

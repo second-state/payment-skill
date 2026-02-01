@@ -49,7 +49,7 @@ fn run(args: Args) -> x402_common::Result<()> {
 
     if !config_path.exists() {
         eprintln!(
-            "Missing the {} file. Please create one using:\n  x402-config use-network base-sepolia",
+            "Missing the {} file. Please create one using:\n  payment-config use-network base-sepolia",
             config_path.display()
         );
         return Err(x402_common::Error::MissingConfig(

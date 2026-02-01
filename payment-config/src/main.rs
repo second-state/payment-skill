@@ -5,7 +5,7 @@ use x402_common::Config;
 
 /// Configuration management for x402 tools
 #[derive(Parser, Debug)]
-#[command(name = "x402-config")]
+#[command(name = "payment-config")]
 #[command(version, about, long_about = None)]
 struct Args {
     #[command(subcommand)]
@@ -209,7 +209,7 @@ fn cmd_list_networks() -> x402_common::Result<()> {
         }
     }
     println!();
-    println!("Usage: x402-config use-network <profile-name>");
+    println!("Usage: payment-config use-network <profile-name>");
 
     Ok(())
 }
@@ -221,8 +221,8 @@ fn cmd_list_keys() -> x402_common::Result<()> {
         println!("  {}", key);
     }
     println!();
-    println!("Usage: x402-config get <key>");
-    println!("       x402-config set <key> <value> [<key> <value> ...]");
+    println!("Usage: payment-config get <key>");
+    println!("       payment-config set <key> <value> [<key> <value> ...]");
 
     Ok(())
 }

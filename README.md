@@ -57,12 +57,12 @@ Key features:
 - Waits for transaction confirmation by default
 - Uses configuration for network and token defaults
 
-### x402-config
+### payment-config
 
 Manages configuration for all x402 tools. Stores settings in `~/.payment/config.toml`.
 
 ```bash
-x402-config <COMMAND>
+payment-config <COMMAND>
 ```
 
 Commands:
@@ -98,7 +98,7 @@ skill/
     ├── create-wallet
     ├── get-address
     ├── pay
-    └── x402-config
+    └── payment-config
 ```
 
 ### How Installation Works
@@ -125,7 +125,7 @@ Supported platforms:
         ├── create-wallet
         ├── get-address
         ├── pay
-        └── x402-config
+        └── payment-config
 ```
 
 ## Development
@@ -138,7 +138,7 @@ This is a Rust workspace with the following crates:
 | `create-wallet` | Wallet creation CLI |
 | `get-address` | Address retrieval CLI |
 | `pay` | Token payment CLI |
-| `x402-config` | Configuration management CLI |
+| `payment-config` | Configuration management CLI |
 | `x402curl` | HTTP client with x402 payment support (coming soon) |
 
 ### Building

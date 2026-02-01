@@ -110,7 +110,7 @@ The tool reads from `~/.payment/config.toml`. Key settings:
 | `network.chain_id` | Expected chain ID for verification |
 | `payment.default_token` | Default ERC-20 token address |
 
-Run `x402-config show` to see current configuration.
+Run `payment-config show` to see current configuration.
 
 ## Exit Codes
 
@@ -146,7 +146,7 @@ By default, the tool waits for the transaction to be included in a block and ver
 
 ### "Network configuration is incomplete"
 
-Run `x402-config use-network <network-name>` to apply a network profile, or manually set the required fields.
+Run `payment-config use-network <network-name>` to apply a network profile, or manually set the required fields.
 
 ### "Wallet not found"
 
@@ -178,7 +178,7 @@ The transaction was included in a block but failed. For ERC-20 transfers, this m
 create-wallet
 
 # Configure the network
-x402-config use-network base-sepolia
+payment-config use-network base-sepolia
 
 # Fund your wallet (external step)
 # ...

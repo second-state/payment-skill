@@ -29,7 +29,7 @@ x402_skill/
 ├── x402curl/
 │   ├── Cargo.toml
 │   └── src/main.rs
-└── x402-config/            # Configuration management tool
+└── payment-config/            # Configuration management tool
     ├── Cargo.toml
     └── src/main.rs
 ```
@@ -275,28 +275,28 @@ When a tool requires configuration that is missing or incomplete:
    - Ask the user for the missing values
    - Call a config tool to save the values (see below)
 
-### New Tool: `x402-config`
+### New Tool: `payment-config`
 
 **Purpose**: View and set configuration values.
 
 **Usage:**
 ```bash
 # View all config
-x402-config show
+payment-config show
 
 # Get specific value
-x402-config get network.rpc_url
+payment-config get network.rpc_url
 
 # Set specific value
-x402-config set network.rpc_url "https://sepolia.base.org"
+payment-config set network.rpc_url "https://sepolia.base.org"
 
 # Set multiple values
-x402-config set network.name "base-sepolia" \
+payment-config set network.name "base-sepolia" \
                  network.chain_id 84532 \
                  network.rpc_url "https://sepolia.base.org"
 
 # Initialize with interactive prompts (for manual use)
-x402-config init
+payment-config init
 ```
 
 **Behavior:**
@@ -319,14 +319,14 @@ x402-config init
 
 ## Predefined Network Profiles
 
-The `x402-config` tool should support predefined network profiles:
+The `payment-config` tool should support predefined network profiles:
 
 ```bash
 # Set up for Base Sepolia testnet
-x402-config use-network base-sepolia
+payment-config use-network base-sepolia
 
 # Set up for Base mainnet
-x402-config use-network base-mainnet
+payment-config use-network base-mainnet
 ```
 
 **Built-in profiles:**
@@ -341,7 +341,7 @@ x402-config use-network base-mainnet
 ## Implementation Order
 
 1. **x402-common** - Shared library with config and wallet utilities
-2. **x402-config** - Configuration management; needed to set up environment
+2. **payment-config** - Configuration management; needed to set up environment
 3. **create-wallet** - Wallet generation (uses x402-common)
 4. **get-address** - Simple, validates wallet format
 5. **pay** - Core payment logic

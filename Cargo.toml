@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "x402-common",
-    "x402-config",
+    "payment-config",
     "create-wallet",
     "get-address",
     "pay",

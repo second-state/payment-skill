@@ -92,4 +92,4 @@ The tool uses `~/.payment/config.toml` for default settings:
 - `payment.default_token_symbol` - Token symbol for display
 - `network.name` - Network name for display
 
-Run `x402-config use-network base-sepolia` to configure the network.
+Run `payment-config use-network base-sepolia` to configure the network.

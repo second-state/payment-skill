@@ -285,7 +285,7 @@ impl Config {
                     ],
                     default: Some("base-sepolia".to_string()),
                 }],
-                hint: "Run: x402-config use-network <network-name>".to_string(),
+                hint: "Run: payment-config use-network <network-name>".to_string(),
             })
         }
     }

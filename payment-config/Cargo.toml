@@ -1,13 +1,13 @@
 [package]
-name = "x402-config"
+name = "payment-config"
 version.workspace = true
 edition = "2021"
 authors.workspace = true
 license.workspace = true
-description = "Configuration management for x402 tools"
+description = "Configuration management for payment tools"
 
 [[bin]]
-name = "x402-config"
+name = "payment-config"
 path = "src/main.rs"
 
 [dependencies]

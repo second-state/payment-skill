@@ -1,11 +1,11 @@
-# x402-config
+# payment-config
 
 Configuration management tool for x402 payment tools.
 
 ## Usage
 
 ```bash
-x402-config <COMMAND>
+payment-config <COMMAND>
 ```
 
 ### Commands
@@ -23,22 +23,22 @@ x402-config <COMMAND>
 
 ```bash
 # Display all configuration
-x402-config show
+payment-config show
 
 # Apply a network profile (recommended for quick setup)
-x402-config use-network base-sepolia
+payment-config use-network base-sepolia
 
 # Get a specific value
-x402-config get network.rpc_url
+payment-config get network.rpc_url
 
 # Set individual values
-x402-config set network.name "base-sepolia" network.chain_id 84532
+payment-config set network.name "base-sepolia" network.chain_id 84532
 
 # List available networks
-x402-config list-networks
+payment-config list-networks
 
 # List all valid config keys
-x402-config list-keys
+payment-config list-keys
 ```
 
 ## Network Profiles
