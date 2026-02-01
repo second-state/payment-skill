@@ -50,18 +50,16 @@ async fn main() -> ExitCode {
     let args = Args::parse();
 
     match run(args).await {
-        Ok(info) => {
-            match serde_json::to_string_pretty(&info) {
-                Ok(json) => {
-                    println!("{}", json);
-                    ExitCode::SUCCESS
-                }
-                Err(e) => {
-                    eprintln!("Error serializing wallet info: {}", e);
-                    ExitCode::from(1)
-                }
+        Ok(info) => match serde_json::to_string_pretty(&info) {
+            Ok(json) => {
+                println!("{}", json);
+                ExitCode::SUCCESS
             }
-        }
+            Err(e) => {
+                eprintln!("Error serializing wallet info: {}", e);
+                ExitCode::from(1)
+            }
+        },
         Err(e) => {
             eprintln!("Error: {}", e);
             ExitCode::from(1)
