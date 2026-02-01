@@ -27,40 +27,19 @@ rm -rf /tmp/payment-skill-repo
 
 ## Post Install: Configuration
 
-After installation, configure the network and wallet.
+After installation, create a wallet and fund it. The default network is **base-mainnet** with USDC.
 
-### Step 1: Configure network
-
-Ask the user which network to use:
-
-> "Which blockchain network should I use for payments?"
->
-> Options:
-> - **base-sepolia** (recommended for testing) - Base testnet
-> - **base-mainnet** - Base mainnet (real funds)
-
-Based on user's answer, run:
-
-```bash
-~/.claude/skills/payment/skill/scripts/x402-config use-network <profile-name>
-```
-
-For example:
-```bash
-~/.claude/skills/payment/skill/scripts/x402-config use-network base-sepolia
-```
-
-### Step 2: Create wallet
+### Step 1: Create wallet
 
 ```bash
 ~/.claude/skills/payment/skill/scripts/create-wallet
 ```
 
-**If error "Wallet already exists"**: Ignore and proceed to Step 3.
+**If error "Wallet already exists"**: Ignore and proceed to Step 2.
 
 **If successful**: A new wallet is created.
 
-### Step 3: Get wallet address and balance
+### Step 2: Get wallet address and balance
 
 ```bash
 ~/.claude/skills/payment/skill/scripts/get-address
@@ -72,13 +51,13 @@ This outputs JSON with the wallet address and current balance:
 {
   "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
   "balance": "0",
-  "token": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
   "token_symbol": "USDC",
-  "network": "base-sepolia"
+  "network": "base-mainnet"
 }
 ```
 
-### Step 4: Ask user to fund the wallet
+### Step 3: Ask user to fund the wallet
 
 Show the user the address and balance, then ask them to fund it:
 
@@ -86,11 +65,9 @@ Show the user the address and balance, then ask them to fund it:
 >
 > Current USDC balance: `<balance>`
 >
-> To enable payments, please fund this address on `<network>` with:
+> To enable payments, please fund this address on base-mainnet with:
 > - **USDC** - for making payments
-> - **ETH** (0.001 ETH) - for gas fees
->
-> You can get testnet tokens from faucets if using base-sepolia."
+> - **ETH** (0.001 ETH) - for gas fees"
 
 ---
 
