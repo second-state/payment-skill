@@ -10,7 +10,7 @@ This skill enables Claude agents to handle HTTP 402 (Payment Required) responses
 x402_skill/
 ├── Cargo.toml              # Workspace manifest
 ├── PLAN.md                 # This file
-├── x402-common/            # Shared library crate
+├── payment-common/         # Shared library crate
 │   ├── Cargo.toml
 │   └── src/
 │       ├── lib.rs
@@ -175,7 +175,7 @@ x402_skill/
 
 ## Shared Components
 
-Consider creating a shared library crate (`x402-common`) for:
+Consider creating a shared library crate (`payment-common`) for:
 - Wallet loading/decryption
 - Configuration file handling (`~/.payment/config.toml`)
 - Common types and error handling
@@ -340,9 +340,9 @@ payment-config use-network base-mainnet
 
 ## Implementation Order
 
-1. **x402-common** - Shared library with config and wallet utilities
+1. **payment-common** - Shared library with config and wallet utilities
 2. **payment-config** - Configuration management; needed to set up environment
-3. **create-wallet** - Wallet generation (uses x402-common)
+3. **create-wallet** - Wallet generation (uses payment-common)
 4. **get-address** - Simple, validates wallet format
 5. **pay** - Core payment logic
 6. **x402curl** - Integrates everything

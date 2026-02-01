@@ -2,10 +2,10 @@ use alloy::primitives::Address;
 use alloy::providers::ProviderBuilder;
 use alloy::sol;
 use clap::Parser;
+use payment_common::{Config, Wallet};
 use serde::Serialize;
 use std::path::PathBuf;
 use std::process::ExitCode;
-use x402_common::{Config, Wallet};
 
 // ERC-20 balanceOf function
 sol! {

@@ -4,12 +4,12 @@ version.workspace = true
 edition = "2021"
 authors.workspace = true
 license.workspace = true
-description = "Create a new Ethereum-compatible wallet for x402 payments"
+description = "Create a new Ethereum-compatible wallet for payments"
 
 [[bin]]
 name = "create-wallet"
 path = "src/main.rs"
 
 [dependencies]
-x402_common = { path = "../x402-common" }
+payment_common = { path = "../payment-common" }
 clap = { version = "4", features = ["derive"] }

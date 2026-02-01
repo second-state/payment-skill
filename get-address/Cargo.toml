@@ -11,7 +11,7 @@ name = "get-address"
 path = "src/main.rs"
 
 [dependencies]
-x402_common = { path = "../x402-common" }
+payment_common = { path = "../payment-common" }
 clap = { version = "4", features = ["derive"] }
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 alloy = { version = "1.0", default-features = false, features = [

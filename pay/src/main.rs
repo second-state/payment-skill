@@ -4,10 +4,10 @@ use alloy::providers::{Provider, ProviderBuilder};
 use alloy::signers::local::PrivateKeySigner;
 use alloy::sol;
 use clap::Parser;
+use payment_common::Config;
 use std::fs;
 use std::path::PathBuf;
 use std::process::ExitCode;
-use x402_common::Config;
 
 // ERC-20 transfer function
 sol! {
