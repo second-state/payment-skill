@@ -113,18 +113,14 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 - `-X, --request <METHOD>` - HTTP method (GET, POST, etc.)
 - `-H, --header <HEADER>` - Add header (can be repeated)
 - `-d, --data <DATA>` - Request body
-- `--rpc <URL>` - Ethereum RPC endpoint (uses config default)
-- `--wallet <PATH>` - Path to keystore (default: `~/.payment/wallet.json`)
-- `--password <PASSWORD>` - Wallet password
-- `--password-file <PATH>` - Read password from file
-- `--max-payment <AMOUNT>` - Maximum auto-payment amount (fails if payment exceeds this)
+- `--max-payment <AMOUNT>` - Maximum auto-payment in human units, e.g., 5 for 5 USDC (fails if payment exceeds this)
 - `--dry-run` - Show payment details without executing
 
 **Example:**
 ```bash
-# Access a paid API endpoint (uses RPC from config)
+# Access a paid API endpoint, auto-pay up to 5 USDC
 ~/.claude/skills/payment/skill/scripts/x402curl https://api.example.com/premium/data \
-    --max-payment 5000000
+    --max-payment 5
 ```
 
 **Behavior:**
@@ -138,19 +134,19 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 ```json
 {
   "recipient": "0x...",
-  "amount": "1000000",
+  "amount": "1",
   "token": "0x...",
-  "network": "base-sepolia",
-  "rpc": "https://sepolia.base.org"
+  "network": "base-mainnet",
+  "rpc": "https://mainnet.base.org"
 }
 ```
 
 Or via headers:
 ```
 X-Payment-Recipient: 0x...
-X-Payment-Amount: 1000000
+X-Payment-Amount: 1
 X-Payment-Token: 0x...
-X-Payment-Network: base-sepolia
+X-Payment-Network: base-mainnet
 ```
 
 **Output:** Final HTTP response body to stdout, status info to stderr.
