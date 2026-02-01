@@ -104,31 +104,26 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Usage:**
 ```bash
-~/.claude/skills/payment/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> --rpc <URL> [OPTIONS]
+~/.claude/skills/payment/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
 ```
 
 **Required:**
 - `--to <ADDRESS>` - Recipient Ethereum address
 - `--amount <AMOUNT>` - Amount to send (in token's smallest unit, e.g., wei for ETH)
-- `--rpc <URL>` - Ethereum JSON-RPC endpoint
 
 **Options:**
-- `--token <ADDRESS>` - ERC-20 token contract address (omit for native ETH/gas token)
+- `--token <ADDRESS>` - ERC-20 token contract address (uses config default, omit for native ETH/gas token)
+- `--rpc <URL>` - Ethereum JSON-RPC endpoint (uses config default)
 - `--wallet <PATH>` - Path to keystore (default: `~/.payment/wallet.json`)
 - `--password <PASSWORD>` - Wallet password
 - `--password-file <PATH>` - Read password from file
 - `--chain-id <ID>` - Chain ID (auto-detected if omitted)
-- `--gas-price <GWEI>` - Gas price override
 - `--no-wait` - Don't wait for confirmation (returns immediately after broadcast)
 
 **Example:**
 ```bash
-# Pay 1000000 units of USDC on Base Sepolia
-~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd \
-    --amount 1000000 \
-    --token 0x036CbD53842c5426634e7929541eC2318f3dCF7e \
-    --rpc https://sepolia.base.org \
-    --password-file ~/.payment/password.txt
+# Pay 1 USDC (uses token and RPC from config)
+~/.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1000000
 ```
 
 **Output:** Prints the transaction hash (e.g., `0xabc123...`) after confirmation.
@@ -157,7 +152,7 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 - `-X, --request <METHOD>` - HTTP method (GET, POST, etc.)
 - `-H, --header <HEADER>` - Add header (can be repeated)
 - `-d, --data <DATA>` - Request body
-- `--rpc <URL>` - Ethereum RPC endpoint (required for payments)
+- `--rpc <URL>` - Ethereum RPC endpoint (uses config default)
 - `--wallet <PATH>` - Path to keystore (default: `~/.payment/wallet.json`)
 - `--password <PASSWORD>` - Wallet password
 - `--password-file <PATH>` - Read password from file
@@ -166,10 +161,8 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 
 **Example:**
 ```bash
-# Access a paid API endpoint
+# Access a paid API endpoint (uses RPC from config)
 ~/.claude/skills/payment/skill/scripts/x402curl https://api.example.com/premium/data \
-    --rpc https://sepolia.base.org \
-    --password-file ~/.payment/password.txt \
     --max-payment 5000000
 ```
 
