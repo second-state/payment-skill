@@ -1,20 +1,25 @@
 # Configuration for static builds
+#
+# Linux: Fully static binaries with musl libc (no runtime dependencies)
+# macOS: Cannot be fully static due to Apple restrictions (libSystem always dynamic)
+# Windows: Static CRT linking
 
-# Linux x86_64 - use musl for fully static binary
+# Linux x86_64 - use musl for fully static binary (no libc dependency)
 [target.x86_64-unknown-linux-musl]
-rustflags = ["-C", "target-feature=+crt-static"]
+rustflags = ["-C", "target-feature=+crt-static", "-C", "link-self-contained=yes"]
 
-# Linux aarch64 - use musl for fully static binary
+# Linux aarch64 - use musl for fully static binary (no libc dependency)
 [target.aarch64-unknown-linux-musl]
-rustflags = ["-C", "target-feature=+crt-static"]
+rustflags = ["-C", "target-feature=+crt-static", "-C", "link-self-contained=yes"]
 
-# macOS - static linking where possible (system libs still dynamic)
+# macOS x86_64 - static where possible (libSystem.dylib always required by Apple)
 [target.x86_64-apple-darwin]
 rustflags = ["-C", "target-feature=+crt-static"]
 
+# macOS aarch64 - static where possible (libSystem.dylib always required by Apple)
 [target.aarch64-apple-darwin]
 rustflags = ["-C", "target-feature=+crt-static"]
 
-# Windows - static CRT
+# Windows x86_64 - static CRT (MSVCRT statically linked)
 [target.x86_64-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
