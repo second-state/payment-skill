@@ -9,49 +9,6 @@ For example:
 - User says "send 0.5 USDC" → use `--amount 500000`
 - User says "send 100 USDC" → use `--amount 100000000`
 
-## IMPORTANT: Bootstrap Before First Use
-
-Before using any payment tool, you MUST check if the binaries are installed and bootstrap if needed.
-
-### Step 1: Check if binaries are installed
-
-```bash
-# Check if the get-address binary exists
-ls ~/.claude/skills/payment/skill/scripts/get-address
-```
-
-### Step 2: If binaries are missing, run bootstrap
-
-```bash
-# Run bootstrap to download platform-specific binaries
-~/.claude/skills/payment/skill/bootstrap.sh
-```
-
-The bootstrap script will:
-1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
-2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `skill/scripts/`
-
-### Step 3: Run tools from scripts directory
-
-All tool commands should be run from `~/.claude/skills/payment/skill/scripts/`:
-
-```bash
-~/.claude/skills/payment/skill/scripts/get-address [OPTIONS]
-~/.claude/skills/payment/skill/scripts/pay [OPTIONS]
-~/.claude/skills/payment/skill/scripts/x402curl [OPTIONS]
-~/.claude/skills/payment/skill/scripts/x402-config [OPTIONS]
-```
-
-**Requirements for bootstrap:**
-- `curl` or `wget` (for downloading)
-- `unzip` (for extraction)
-
-**Manual download:** If automatic download fails, download the appropriate zip from:
-https://github.com/second-state/payment-skill/releases
-
-Extract to `~/.claude/skills/payment/skill/scripts/`
-
 ## Overview
 
 The x402 protocol allows services to request payment via HTTP 402 responses. This skill provides tools to:
@@ -362,3 +319,25 @@ When required config is missing, tools output JSON to stderr:
 - Always use `--password-file` instead of `--password` in scripts to avoid shell history exposure
 - Set `--max-payment` when using `x402curl` to prevent unexpected large payments
 - The wallet file (`wallet.json`) should have restricted permissions (`chmod 600`)
+
+---
+
+## Troubleshooting
+
+### Binary tools not found
+
+If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, x402-config), run the bootstrap script to download them:
+
+```bash
+~/.claude/skills/payment/skill/bootstrap.sh
+```
+
+The bootstrap script will:
+1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
+2. Download the appropriate binary package from GitHub releases
+3. Extract binaries to `~/.claude/skills/payment/skill/scripts/`
+
+**Manual download:** If automatic download fails, download the appropriate zip from:
+https://github.com/second-state/payment-skill/releases
+
+Extract to `~/.claude/skills/payment/skill/scripts/`
