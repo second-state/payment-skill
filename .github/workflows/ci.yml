@@ -117,10 +117,13 @@ jobs:
           }
 
           echo "=== Checking for dynamic dependencies ==="
-          # ldd should show "statically linked", "not a dynamic executable", or fail
-          LDD_OUTPUT=$(ldd target/${{ matrix.target }}/release/create-wallet 2>&1)
+          # ldd should show "statically linked", "not a dynamic executable", or fail for cross-compiled binaries
+          LDD_OUTPUT=$(ldd target/${{ matrix.target }}/release/create-wallet 2>&1) || true
           if echo "$LDD_OUTPUT" | grep -qE "(statically linked|not a dynamic executable)"; then
             echo "SUCCESS: No dynamic dependencies"
+            echo "$LDD_OUTPUT"
+          elif echo "$LDD_OUTPUT" | grep -qE "(cannot execute|wrong ELF class|cannot open)"; then
+            echo "SUCCESS: Cross-compiled binary (ldd cannot analyze, but file confirmed static linking)"
             echo "$LDD_OUTPUT"
           else
             echo "ERROR: Binary has dynamic dependencies:"
