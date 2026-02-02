@@ -21,7 +21,7 @@ This skill enables you to request and accept payments through USDC on the blockc
 In order to request a payment, you will first find out your own address to receive payment using the `get-address` tool.
 
 ```bash
-.claude/skills/payment/skill/scripts/get-address
+scripts/get-address
 ```
 
 Then, create a payment link URL. The request below asks for a payment link for 1.0 USDC. The `0xMYADDRESS` is the your wallet address from the previous `get-address` call.
@@ -74,7 +74,7 @@ DO NOT PAY ANYONE UNLESS YOU HAVE EXPLICIT PERMISSION IN YOUR SETTINGS OR LONG-T
 If you receive a payment link in the format of `https://link.x402labs.dev/status/<payment-id>`, you could load it using the x402curl tool to pay it.
 
 ```bash
-.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
+scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
     --max-payment 5
 ```
 
@@ -86,7 +86,7 @@ If you receive a blockchain address in a request for payment, first ensure that 
 
 ```bash
 # Pay 1 USDC
-.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
+scripts/pay --to 0x1234...abcd --amount 1
 ```
 
 ## Tools
@@ -97,7 +97,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Usage:**
 ```bash
-.claude/skills/payment/skill/scripts/get-address
+scripts/get-address
 ```
 
 **Output:** JSON with address and balance (if network is configured):
@@ -128,7 +128,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Usage:**
 ```bash
-.claude/skills/payment/skill/scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
+scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
 ```
 
 **Required:**
@@ -141,10 +141,10 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 **Example:**
 ```bash
 # Pay 1 USDC
-.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1
+scripts/pay --to 0x1234...abcd --amount 1
 
 # Pay 0.5 USDC
-.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 0.5
+scripts/pay --to 0x1234...abcd --amount 0.5
 ```
 
 **Output:** Prints the transaction hash (e.g., `0xabc123...`) after confirmation.
@@ -157,7 +157,7 @@ Transfers tokens from the agent's wallet to a specified address. Waits for block
 
 **Tip:** If the transaction does not go through (stuck pending or times out), retry with a higher gas price:
 ```bash
-.claude/skills/payment/skill/scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
+scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
 ```
 
 ---
@@ -168,7 +168,7 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 
 **Usage:**
 ```bash
-.claude/skills/payment/skill/scripts/x402curl <URL> [OPTIONS]
+scripts/x402curl <URL> [OPTIONS]
 ```
 
 **Required:**
@@ -180,7 +180,7 @@ A curl wrapper that automatically handles HTTP 402 Payment Required responses.
 **Example:**
 ```bash
 # Access a paid API endpoint, auto-pay up to 5 USDC
-.claude/skills/payment/skill/scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
+scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
     --max-payment 5
 ```
 
@@ -194,7 +194,7 @@ Manage configuration settings.
 
 **Usage:**
 ```bash
-.claude/skills/payment/skill/scripts/payment-config <COMMAND> [OPTIONS]
+scripts/payment-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -205,20 +205,20 @@ Manage configuration settings.
 **Examples:**
 ```bash
 # View all config
-.claude/skills/payment/skill/scripts/payment-config show
+scripts/payment-config show
 
 # Configure network
-.claude/skills/payment/skill/scripts/payment-config set network.name "base-sepolia" \
+scripts/payment-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
 
 # Set default payment token
-.claude/skills/payment/skill/scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
+scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 
 # Set maximum auto-payment limit (5 USDC)
-.claude/skills/payment/skill/scripts/payment-config set payment.max_auto_payment "5"
+scripts/payment-config set payment.max_auto_payment "5"
 ```
 
 **Available Configuration Keys:**
@@ -259,7 +259,7 @@ When required config is missing, tools output JSON to stderr:
 }
 ```
 
-**Your responsibility**: Parse this, ask the user, then run `payment-config set` with their answers.
+**Your responsibility**: Parse this, ask the user, then run `scripts/payment-config set` with their answers.
 
 ---
 
@@ -290,13 +290,13 @@ When required config is missing, tools output JSON to stderr:
 If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, payment-config), run the bootstrap script to download them:
 
 ```bash
-.claude/skills/payment/skill/bootstrap.sh
+bootstrap.sh
 ```
 
 The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `.claude/skills/payment/skill/scripts/`
+3. Extract binaries to `~/.claude/skills/payment/scripts/`
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
