@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Agent — Accept USDC Payments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #fafafa;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #2a2a2a;
+            padding: 40px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .github-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #262626;
+            color: #fafafa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid #404040;
+        }
+
+        .github-button:hover {
+            background: #323232;
+            border-color: #525252;
+        }
+
+        .github-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .brand {
+            font-size: 24px;
+        }
+
+        .brand img {
+            height: 48px;
+            width: auto;
+        }
+
+        /* Hero Tabs */
+        .hero-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .tab {
+            color: #525252;
+            background: #171717;
+            border: 1px solid #262626;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: #262626;
+            color: #a3a3a3;
+        }
+
+        .tab.active {
+            background: #ff6b35;
+            color: #0a0a0a;
+            border-color: #ff6b35;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+        }
+
+        .hero-emoji {
+            display: none;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #a3a3a3;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #ff6b35;
+            color: #0a0a0a;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content p {
+            color: #a3a3a3;
+            font-size: 16px;
+        }
+
+        .step-content strong {
+            color: #fafafa;
+        }
+
+        /* Code Block */
+        .code-section {
+            margin-bottom: 60px;
+        }
+
+        .code-label {
+            font-size: 13px;
+            color: #ff6b35;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #171717;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #e5e5e5;
+        }
+
+        .code-block .comment {
+            color: #737373;
+        }
+
+        .code-block .string {
+            color: #86efac;
+        }
+
+        .code-block .variable {
+            color: #93c5fd;
+        }
+
+        .code-block .command {
+            color: #fcd34d;
+        }
+
+        /* CTA Button */
+        .cta-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b35;
+            color: #0a0a0a;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .cta-button:hover {
+            background: #ff8555;
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #2a2a2a;
+            padding: 24px 0;
+            margin-top: 80px;
+            text-align: center;
+            color: #525252;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="brand">
+                    <img src="/payment-logo.svg" alt="Payment Agent Logo">
+                </div>
+                <a href="https://github.com/second-state/payment-skill" class="github-button" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Accept USDC payments<br>in your AI agent</h1>
+            <p class="subtitle">Enable USDC payments in your AI agent with simple setup. <span style="color: #ff6b35;">Built with Rust</span></p>
+
+            <nav class="hero-tabs">
+                <button class="tab active" data-tab="claude-code">Claude Code</button>
+                <button class="tab" data-tab="openclaw">OpenClaw</button>
+            </nav>
+
+            <!-- Claude Code Tab Content -->
+            <div class="tab-content active" id="claude-code">
+                <div class="code-section">
+                    <div class="code-label">Installation</div>
+                    <div class="code-block">
+                        <code>Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-claudecode.md and follow the instructions to set up USDC payments.</code>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p><strong>Send this to your agent</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p><strong>They will ask for money from others as needed</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p><strong>Profit!</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OpenClaw Tab Content -->
+            <div class="tab-content" id="openclaw">
+                <div class="code-section">
+                    <div class="code-label">Installation</div>
+                    <div class="code-block">
+                        <code>Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-openclaw.md and follow the instructions to set up USDC payments.</code>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p><strong>Send this to your agent</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p><strong>They will ask for money from others as needed</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p><strong>Profit!</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            Built for AI agents • USDC on Base
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
