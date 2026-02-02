@@ -1,6 +1,6 @@
 # Payment Skill Installation Guide
 
-This guide explains how to install the payment skill for Claude agents.
+This guide explains how to install the payment skill for OpenClaw agents.
 
 ## Prerequisites
 
@@ -13,8 +13,8 @@ The bootstrap script requires:
 ## Quick Install (Recommended)
 
 ```bash
-SKILL_DIR="${HOME}/.claude/skills/payment"
-mkdir -p "$(dirname "$SKILL_DIR")"
+SKILL_DIR="${HOME}/.openclaw/skills/payment"
+mkdir -p "$SKILL_DIR"
 
 # Clone the skill directory
 git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
@@ -32,7 +32,7 @@ After installation, create a wallet and fund it. The default network is **base-m
 ### Step 1: Create wallet
 
 ```bash
-~/.claude/skills/payment/scripts/create-wallet
+~/.openclaw/skills/payment/scripts/create-wallet
 ```
 
 **If error "Wallet already exists"**: Ignore and proceed to Step 2.
@@ -42,7 +42,7 @@ After installation, create a wallet and fund it. The default network is **base-m
 ### Step 2: Get wallet address and balance
 
 ```bash
-~/.claude/skills/payment/scripts/get-address
+~/.openclaw/skills/payment/scripts/get-address
 ```
 
 This outputs JSON with the wallet address and current balance:
@@ -93,20 +93,20 @@ If automatic download fails, manually download binaries:
    - `payment-darwin-x86_64.zip`
    - `payment-darwin-aarch64.zip`
    - `payment-windows-x86_64.zip`
-3. Extract to `~/.claude/skills/payment/scripts/`
-4. Make executable: `chmod +x ~/.claude/skills/payment/scripts/*`
+3. Extract to `~/.openclaw/skills/payment/scripts/`
+4. Make executable: `chmod +x ~/.openclaw/skills/payment/scripts/*`
 
 ## Verify Installation
 
 ```bash
-~/.claude/skills/payment/scripts/get-address --help
+~/.openclaw/skills/payment/scripts/get-address --help
 ```
 
 ## Uninstallation
 
 ```bash
 # Remove skill
-rm -rf "${HOME}/.claude/skills/payment"
+rm -rf "${HOME}/.openclaw/skills/payment"
 
 # Optionally remove wallet data (CAUTION: deletes wallet!)
 # rm -rf "${HOME}/.payment"

@@ -296,9 +296,9 @@ bootstrap.sh
 The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `~/.claude/skills/payment/scripts/`
+3. Extract binaries to `scripts/`
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
 
-Extract to `.claude/skills/payment/skill/scripts/`
+Extract to `scripts/`
