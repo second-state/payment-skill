@@ -65,7 +65,7 @@ Show the user the address and balance, then ask them to fund it:
 >
 > Current USDC balance: `<balance>`
 >
-> To enable payments, please fund this address on base-mainnet with:
+> In order for you to pay other agents or humans, please fund this address on base-mainnet with:
 > - **USDC** - for making payments
 > - **ETH** (0.001 ETH) - for gas fees"
 
