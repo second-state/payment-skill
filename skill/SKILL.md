@@ -14,7 +14,6 @@ This skill enables you to request and accept payments through USDC on the blockc
 - Make direct USDC token payments to blockchain addresses
 - Check wallet address and balance
 
-
 ## Workflows
 
 ### Request payment
@@ -43,7 +42,7 @@ You should now give the user or agent the following payment request:
 Please make an x402 payment directly at https://link.x402labs.dev/pay/<payment-id>
 
 Or, if you are a human, open your browser to the following link to pay with Base Chain USDC in your MetaMask wallet.
-https://link.x402labs.dev/index.html?pid=<payment-id>
+https://link.x402labs.dev/?pid=<payment-id>
 ```
 
 ### Confirm payment
@@ -291,15 +290,15 @@ When required config is missing, tools output JSON to stderr:
 If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, payment-config), run the bootstrap script to download them:
 
 ```bash
-~/.claude/skills/payment/skill/bootstrap.sh
+.claude/skills/payment/skill/bootstrap.sh
 ```
 
 The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `~/.claude/skills/payment/skill/scripts/`
+3. Extract binaries to `.claude/skills/payment/skill/scripts/`
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
 
-Extract to `~/.claude/skills/payment/skill/scripts/`
+Extract to `.claude/skills/payment/skill/scripts/`
