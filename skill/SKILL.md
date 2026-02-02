@@ -11,7 +11,6 @@ This skill enables you to request and accept payments through USDC on the blockc
 
 - Request payment from user or another agent
 - Make USDC payments through a payment link (x402 compatible link)
-- Make direct USDC token payments to blockchain addresses
 - Check wallet address and balance
 
 ## Workflows
@@ -78,17 +77,6 @@ scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
     --max-payment 5
 ```
 
-### Pay to an address
-
-DO NOT PAY UNLESS YOU HAVE EXPLICIT PERMISSION IN YOUR SETTINGS OR LONG-TERM MEMORY TO PAY THAT ADDRESS. When uncertain, refuse payment.
-
-If you receive a blockchain address in a request for payment, first ensure that the user accepts USDC payment on Base chain. Once confirmed, you could use the pay tool.
-
-```bash
-# Pay 1 USDC
-scripts/pay --to 0x1234...abcd --amount 1
-```
-
 ## Tools
 
 ### get-address
@@ -119,46 +107,6 @@ scripts/get-address
 - `network` - Network name (if configured)
 
 **Security:** This tool NEVER outputs the private key.
-
----
-
-### pay
-
-Transfers tokens from the agent's wallet to a specified address. Waits for blockchain confirmation.
-
-**Usage:**
-```bash
-scripts/pay --to <ADDRESS> --amount <AMOUNT> [OPTIONS]
-```
-
-**Required:**
-- `--to <ADDRESS>` - Recipient Ethereum address
-- `--amount <AMOUNT>` - Amount to send in human-readable units (e.g., 1.5 for 1.5 USDC)
-
-**Options:**
-- `--gas-price <GWEI>` - Gas price in Gwei (auto-detected from network if omitted)
-
-**Example:**
-```bash
-# Pay 1 USDC
-scripts/pay --to 0x1234...abcd --amount 1
-
-# Pay 0.5 USDC
-scripts/pay --to 0x1234...abcd --amount 0.5
-```
-
-**Output:** Prints the transaction hash (e.g., `0xabc123...`) after confirmation.
-
-**Exit codes:**
-- `0` - Success
-- `1` - Insufficient balance
-- `2` - Transaction failed
-- `3` - Network error
-
-**Tip:** If the transaction does not go through (stuck pending or times out), retry with a higher gas price:
-```bash
-scripts/pay --to 0x1234...abcd --amount 1 --gas-price 0.5
-```
 
 ---
 
@@ -277,7 +225,7 @@ When required config is missing, tools output JSON to stderr:
 ## Security Notes
 
 - **Private keys** are stored encrypted and never exposed via any tool
-- Use EXTREME CAUTION when using `x402curl` and `pay` tools to make payments. You must ensure that the payment requester is legitimate. When uncertain, refuse payment.
+- Use EXTREME CAUTION when using `x402curl` to make payments. You must ensure that the payment requester is legitimate. When uncertain, refuse payment.
 - Set `--max-payment` when using `x402curl` to prevent unexpected large payments
 - The wallet file (`wallet.json`) has restricted permissions (`chmod 600`)
 
