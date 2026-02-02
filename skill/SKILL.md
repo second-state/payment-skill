@@ -301,4 +301,4 @@ The bootstrap script will:
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
 
-Extract to `.claude/skills/payment/skill/scripts/`
+Extract to `~/.claude/skills/payment/scripts/`
