@@ -197,11 +197,50 @@
             overflow-x: auto;
         }
 
+        .code-block {
+            position: relative;
+        }
+
         .code-block code {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
             font-size: 14px;
             line-height: 1.7;
             color: #e5e5e5;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #262626;
+            border: 1px solid #404040;
+            color: #a3a3a3;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-button:hover {
+            background: #323232;
+            border-color: #525252;
+            color: #fafafa;
+        }
+
+        .copy-button.copied {
+            background: #166534;
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        .copy-button svg {
+            width: 14px;
+            height: 14px;
         }
 
         .code-block .comment {
@@ -304,7 +343,14 @@
                 <div class="code-section">
                     <div class="code-label">Installation</div>
                     <div class="code-block">
-                        <code>Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-claudecode.md and follow the instructions to set up the payment skill.</code>
+                        <button class="copy-button" data-copy="claude-code-instruction">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                        <code id="claude-code-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-claudecode.md and follow the instructions to set up the payment skill.</code>
                     </div>
                 </div>
 
@@ -337,7 +383,14 @@
                 <div class="code-section">
                     <div class="code-label">Installation</div>
                     <div class="code-block">
-                        <code>Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-openclaw.md and follow the instructions to set up the payment skill.</code>
+                        <button class="copy-button" data-copy="openclaw-instruction">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                        <code id="openclaw-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-openclaw.md and follow the instructions to set up the payment skill.</code>
                     </div>
                 </div>
 
@@ -390,6 +443,31 @@
                 // Show corresponding content
                 const tabId = tab.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Copy button functionality
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const targetId = button.getAttribute('data-copy');
+                const codeElement = document.getElementById(targetId);
+                const text = codeElement.textContent;
+
+                try {
+                    await navigator.clipboard.writeText(text);
+
+                    // Show copied state
+                    button.classList.add('copied');
+                    button.querySelector('span').textContent = 'Copied!';
+
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.querySelector('span').textContent = 'Copy';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
             });
         });
     </script>
