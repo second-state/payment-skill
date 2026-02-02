@@ -5,8 +5,8 @@
 set -e
 
 REPO="second-state/payment-skill"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS_DIR="${SKILL_DIR}/scripts"
 
 # Detect platform
 detect_platform() {
@@ -112,7 +112,7 @@ download_binaries() {
 ensure_config() {
     local config_dir="${HOME}/.payment"
     local config_file="${config_dir}/config.toml"
-    local default_config="${SCRIPT_DIR}/config-default.toml"
+    local default_config="${SKILL_DIR}/config-default.toml"
 
     if [ ! -f "$config_file" ]; then
         echo "Creating default config at ${config_file}..." >&2
