@@ -460,6 +460,30 @@
             });
         });
 
+        // Copy to clipboard with fallback for non-secure contexts
+        function copyToClipboard(text) {
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(text);
+            }
+
+            // Fallback for file:// or non-secure contexts
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                return Promise.resolve();
+            } catch (err) {
+                return Promise.reject(err);
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
         // Copy button functionality
         document.querySelectorAll('.copy-button').forEach(button => {
             button.addEventListener('click', async () => {
@@ -468,7 +492,7 @@
                 const text = codeElement.textContent;
 
                 try {
-                    await navigator.clipboard.writeText(text);
+                    await copyToClipboard(text);
 
                     // Show checkmark
                     button.classList.add('copied');
