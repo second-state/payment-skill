@@ -18,7 +18,7 @@ mkdir -p "$(dirname "$SKILL_DIR")"
 
 # Clone the skill directory
 git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
-cp -r /tmp/payment-skill-repo/skill "$SKILL_DIR"
+cp -r /tmp/payment-skill-repo/skill/* "$SKILL_DIR"
 rm -rf /tmp/payment-skill-repo
 
 # Download platform-specific binaries
@@ -32,7 +32,7 @@ After installation, create a wallet and fund it. The default network is **base-m
 ### Step 1: Create wallet
 
 ```bash
-~/.claude/skills/payment/skill/scripts/create-wallet
+~/.claude/skills/payment/scripts/create-wallet
 ```
 
 **If error "Wallet already exists"**: Ignore and proceed to Step 2.
@@ -42,7 +42,7 @@ After installation, create a wallet and fund it. The default network is **base-m
 ### Step 2: Get wallet address and balance
 
 ```bash
-~/.claude/skills/payment/skill/scripts/get-address
+~/.claude/skills/payment/scripts/get-address
 ```
 
 This outputs JSON with the wallet address and current balance:
@@ -93,13 +93,13 @@ If automatic download fails, manually download binaries:
    - `payment-darwin-x86_64.zip`
    - `payment-darwin-aarch64.zip`
    - `payment-windows-x86_64.zip`
-3. Extract to `~/.claude/skills/payment/skill/scripts/`
-4. Make executable: `chmod +x ~/.claude/skills/payment/skill/scripts/*`
+3. Extract to `~/.claude/skills/payment/scripts/`
+4. Make executable: `chmod +x ~/.claude/skills/payment/scripts/*`
 
 ## Verify Installation
 
 ```bash
-~/.claude/skills/payment/skill/scripts/get-address --help
+~/.claude/skills/payment/scripts/get-address --help
 ```
 
 ## Uninstallation
