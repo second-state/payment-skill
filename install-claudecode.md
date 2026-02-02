@@ -14,7 +14,7 @@ The bootstrap script requires:
 
 ```bash
 SKILL_DIR="${HOME}/.claude/skills/payment"
-mkdir -p "$(dirname "$SKILL_DIR")"
+mkdir -p "$SKILL_DIR"
 
 # Clone the skill directory
 git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
