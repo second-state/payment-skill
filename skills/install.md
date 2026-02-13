@@ -1,6 +1,8 @@
 # Payment Skill Installation Guide
 
-This guide explains how to install the payment skill for Claude agents.
+Follow these steps to install the skill that enable you (an AI agent) to request, receive and verify payments from others.
+
+> Install location: Commands below use the default `~/.claude/skills`. Alternatives: `~/.openclaw/skills`, `~/.opencode/skills`, `~/.agent/skills` — replace the prefix if using a different agent tool.
 
 ## Prerequisites
 
@@ -25,62 +27,26 @@ rm -rf /tmp/payment-skill-repo
 "${SKILL_DIR}/bootstrap.sh"
 ```
 
-## Post Install: Configuration
+## Post Install: Wallet configuration
 
 After installation, create a wallet and fund it. The default network is **base-mainnet** with USDC.
 
-### Step 1: Create wallet
+### Import an existing wallet
+
+Ask the user to give you his existing `wallet.json` file and its password. 
+
+- Save the `wallet.json` file to `~/.claude/skills/payment/`
+- Save the password as the content of the `~/.claude/skills/payment/password.txt` file
+
+### Create a new wallet
+
+If the user asks you to create a new wallet, run the following command.
 
 ```bash
 ~/.claude/skills/payment/scripts/create-wallet
 ```
 
-**If error "Wallet already exists"**: Ignore and proceed to Step 2.
-
-**If successful**: A new wallet is created.
-
-### Step 2: Get wallet address and balance
-
-```bash
-~/.claude/skills/payment/scripts/get-address
-```
-
-This outputs JSON with the wallet address and current balance:
-
-```json
-{
-  "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f...",
-  "balance": "0",
-  "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-  "token_symbol": "USDC",
-  "network": "base-mainnet"
-}
-```
-
-### Step 3: Ask user to fund the wallet
-
-Show the user the address and balance, then ask them to fund it:
-
-> "Your payment wallet address is: `<address>`
->
-> Current USDC balance: `<balance>`
->
-> In order for you to pay other agents or humans, please fund this address on base-mainnet with:
-> - **USDC** - for making payments
-> - **ETH** (0.001 ETH) - for gas fees"
-
----
-
-## Runtime Data
-
-Wallet and configuration are stored separately (persists across reinstalls):
-
-```
-~/.payment/
-├── config.toml           # Network, token, and payment settings
-├── wallet.json           # Encrypted wallet keystore
-└── password.txt          # Wallet password (auto-generated)
-```
+Ignore the error "Wallet already exists".
 
 ## Manual Binary Installation
 
@@ -96,20 +62,10 @@ If automatic download fails, manually download binaries:
 3. Extract to `~/.claude/skills/payment/scripts/`
 4. Make executable: `chmod +x ~/.claude/skills/payment/scripts/*`
 
-## Verify Installation
+Verify the installation:
 
 ```bash
 ~/.claude/skills/payment/scripts/get-address --help
-```
-
-## Uninstallation
-
-```bash
-# Remove skill
-rm -rf "${HOME}/.claude/skills/payment"
-
-# Optionally remove wallet data (CAUTION: deletes wallet!)
-# rm -rf "${HOME}/.payment"
 ```
 
 ## Troubleshooting
