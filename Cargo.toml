@@ -6,7 +6,6 @@ members = [
     "create-wallet",
     "get-address",
     "pay",
-    "x402curl",
 ]
 
 [workspace.package]

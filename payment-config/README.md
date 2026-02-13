@@ -66,12 +66,12 @@ payment-config list-keys
 
 ## Configuration File
 
-Configuration is stored in `~/.payment/config.toml`:
+Configuration is stored in `config.toml` (in the skill root directory):
 
 ```toml
 [wallet]
-path = "~/.payment/wallet.json"
-password_file = "~/.payment/password.txt"
+path = "wallet.json"
+password_file = "password.txt"
 
 [network]
 name = "base-sepolia"

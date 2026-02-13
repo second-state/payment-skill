@@ -51,7 +51,7 @@ Key features:
 
 ### payment-config
 
-Manages configuration for all x402 tools. Stores settings in `~/.payment/config.toml`.
+Manages configuration for all x402 tools. Stores settings in `config.toml` (located in the skill root directory, alongside the binaries).
 
 ```bash
 payment-config <COMMAND>
@@ -67,16 +67,16 @@ Commands:
 
 ## Personal Data Storage
 
-All personal data is stored in the `~/.payment/` folder:
+All personal data is stored in the skill root directory (the parent of the `scripts/` directory where binaries live):
 
 ```
-~/.payment/
+<skill-root>/
 ├── config.toml      # Network, token, and payment settings
 ├── wallet.json      # Encrypted wallet keystore (Web3 Secret Storage format)
 └── password.txt     # Wallet password (auto-generated, 600 permissions)
 ```
 
-This folder persists across skill reinstalls, so your wallet and configuration are preserved.
+The data directory is determined at runtime via `std::env::current_exe()` — each binary resolves paths relative to its own location (`../` from the `scripts/` directory).
 
 ## Skill Directory Structure
 

@@ -4,7 +4,7 @@ A command-line tool to make token payments from an x402 wallet.
 
 ## Overview
 
-`pay` transfers ERC-20 tokens or native ETH/gas tokens from your x402 wallet to a recipient address. It reads configuration from `~/.payment/config.toml` and handles wallet decryption, balance checking, and transaction confirmation.
+`pay` transfers ERC-20 tokens or native ETH/gas tokens from your x402 wallet to a recipient address. It reads configuration from `config.toml` (in the skill root directory) and handles wallet decryption, balance checking, and transaction confirmation.
 
 ## Installation
 
@@ -100,7 +100,7 @@ Confirmed in block 12345678
 
 ## Configuration
 
-The tool reads from `~/.payment/config.toml`. Key settings:
+The tool reads from `config.toml` (in the skill root directory). Key settings:
 
 | Key | Description |
 |-----|-------------|

@@ -1,5 +1,5 @@
 use crate::error::{Error, Result};
-use crate::{default_config_path, default_password_path, default_wallet_path, ensure_data_dir};
+use crate::{default_config_path, default_data_dir, ensure_data_dir};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -23,11 +23,11 @@ pub struct WalletConfig {
 }
 
 fn default_wallet_path_string() -> String {
-    default_wallet_path().display().to_string()
+    "wallet.json".to_string()
 }
 
 fn default_password_path_string() -> String {
-    default_password_path().display().to_string()
+    "password.txt".to_string()
 }
 
 impl Default for WalletConfig {
@@ -103,25 +103,25 @@ impl Config {
         Ok(())
     }
 
-    /// Get the wallet path from config, expanding ~ to home directory
+    /// Get the wallet path from config, resolving relative paths against the data directory
     pub fn wallet_path(&self) -> PathBuf {
-        expand_tilde(&self.wallet.path)
+        resolve_path(&self.wallet.path)
     }
 
-    /// Get the password file path from config
+    /// Get the password file path from config, resolving relative paths against the data directory
     pub fn password_path(&self) -> PathBuf {
-        expand_tilde(&self.wallet.password_file)
+        resolve_path(&self.wallet.password_file)
     }
 }
 
-/// Expand ~ to home directory in paths
-fn expand_tilde(path: &str) -> PathBuf {
-    if let Some(stripped) = path.strip_prefix("~/") {
-        if let Some(home) = dirs::home_dir() {
-            return home.join(stripped);
-        }
+/// Resolve a path: absolute paths are used as-is, relative paths are resolved against the data directory
+fn resolve_path(path: &str) -> PathBuf {
+    let p = PathBuf::from(path);
+    if p.is_absolute() {
+        p
+    } else {
+        default_data_dir().join(p)
     }
-    PathBuf::from(path)
 }
 
 /// Predefined network profiles
@@ -318,7 +318,8 @@ mod tests {
     #[test]
     fn test_default_config() {
         let config = Config::default();
-        assert!(config.wallet.path.contains(".payment"));
+        assert_eq!(config.wallet.path, "wallet.json");
+        assert_eq!(config.wallet.password_file, "password.txt");
         assert!(config.network.chain_id.is_none());
     }
 

@@ -22,7 +22,7 @@ create-wallet [OPTIONS]
 |--------|-------------|
 | `--password <PASSWORD>` | Password to encrypt the wallet. If not provided, a secure 32-character password is auto-generated. |
 | `--password-file <PATH>` | Read the password from a file instead of command line. |
-| `-o, --output <PATH>` | Output path for the wallet keystore file. Default: `~/.payment/wallet.json` |
+| `-o, --output <PATH>` | Output path for the wallet keystore file. Default: `wallet.json` in the skill root directory |
 | `-f, --force` | Force overwrite if a wallet already exists at the output path. |
 | `-h, --help` | Print help information. |
 | `-V, --version` | Print version information. |
@@ -39,8 +39,8 @@ Output:
 ```
 0x742d35Cc6634C0532925a3b844Bc9e7595f...
 Wallet created successfully!
-Keystore: /home/user/.payment/wallet.json
-Password saved to: /home/user/.payment/password.txt
+Keystore: /path/to/skill/wallet.json
+Password saved to: /path/to/skill/password.txt
 
 IMPORTANT: Keep your password file secure!
 
@@ -100,7 +100,7 @@ echo "New wallet address: $ADDRESS"
 
 ### Password handling:
 - If no password is provided, a secure 32-character alphanumeric password is generated
-- Auto-generated passwords are saved to `~/.payment/password.txt` with `600` permissions
+- Auto-generated passwords are saved to `password.txt` in the skill root directory with `600` permissions
 - When using `--password`, the password is NOT saved to disk
 
 ## File Format
@@ -162,7 +162,7 @@ A wallet already exists at the default or specified location. Either:
 
 ### "Permission denied"
 
-Ensure you have write permissions to the output directory. The default directory `~/.payment/` is created automatically with proper permissions.
+Ensure you have write permissions to the output directory. The default directory (the skill root, parent of `scripts/`) is created automatically with proper permissions.
 
 ### Password file issues
 

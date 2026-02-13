@@ -12,7 +12,7 @@ get-address [OPTIONS]
 
 | Option | Short | Description |
 |--------|-------|-------------|
-| `--wallet <PATH>` | `-w` | Path to wallet keystore file (default: `~/.payment/wallet.json`) |
+| `--wallet <PATH>` | `-w` | Path to wallet keystore file (default: `wallet.json` in skill root) |
 | `--config <PATH>` | `-c` | Path to configuration file |
 | `--help` | `-h` | Print help information |
 | `--version` | `-V` | Print version |
@@ -84,7 +84,7 @@ If no network is configured, the output only includes the address:
 
 ## Configuration
 
-The tool uses `~/.payment/config.toml` for default settings:
+The tool uses `config.toml` (in the skill root directory) for default settings:
 
 - `wallet.path` - Default wallet file location
 - `network.rpc_url` - RPC endpoint for balance queries
