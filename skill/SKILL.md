@@ -7,31 +7,18 @@ description: Make and receive payments. Use this skill when you need to request 
 
 This skill enables you to request and accept payments through USDC on the blockchain.
 
+**NOTE:** If you are Claude Code, set `{baseDir}` as `.` -- the directory where this `SKILL.md` file is located in.
+
 **NOTE:** Amounts are in human-readable units. For example, `--amount 1.5` means 1.5 USDC.
 
-## Prerequisites Check
-
-Detect which skills folder contains `payment-config` by probing known locations:
-
-```
-for dir in ~/.claude/skills ~/.openclaw/skills ~/.opencode/skills ~/.agent/skills; do
-  if [ -x "$dir/payment/scripts/payment-config" ]; then
-    echo "$dir"
-    break
-  fi
-done
-```
-
-Remember the result as `skills_folder`. If no match is found, the binary is not installed — point the user to `install.md` to install.
-
-## Workflows
+## Workflow
 
 ### Request payment
 
 In order to request a payment, you will first find out your own address to receive payment using the `get-address` tool.
 
 ```bash
-${skills_folder}/payment/scripts/get-address
+{baseDir}/scripts/get-address
 ```
 
 Then, create a payment link URL. The request below asks for a payment link for 1.0 USDC. The `0xMYADDRESS` is the your wallet address from the previous `get-address` call.
@@ -85,7 +72,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Usage:**
 ```bash
-${skills_folder}/payment/scripts/get-address
+{baseDir}/scripts/get-address
 ```
 
 **Output:** JSON with address and balance (if network is configured):
@@ -114,7 +101,7 @@ Manage configuration settings.
 
 **Usage:**
 ```bash
-${skills_folder}/payment/scripts/payment-config <COMMAND> [OPTIONS]
+{baseDir}/scripts/payment-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -125,15 +112,15 @@ ${skills_folder}/payment/scripts/payment-config <COMMAND> [OPTIONS]
 **Examples:**
 ```bash
 # View all config
-scripts/payment-config show
+{baseDir}/scripts/payment-config show
 
 # Configure network
-scripts/payment-config set network.name "base-sepolia" \
+{baseDir}/scripts/payment-config set network.name "base-sepolia" \
                network.chain_id 84532 \
                network.rpc_url "https://sepolia.base.org"
 
 # Set default payment token
-scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
+{baseDir}/scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
 ```
@@ -156,7 +143,7 @@ scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541e
 
 ## Configuration
 
-Configuration file: `${skills_folder}/payment/config.toml`
+Configuration file: `{baseDir}/config.toml`
 
 ### Missing Config Behavior
 
@@ -176,7 +163,7 @@ When required config is missing, tools output JSON to stderr:
 }
 ```
 
-**Your responsibility**: Parse this, ask the user, then run `${skills_folder}/payment/scripts/payment-config set` with their answers.
+**Your responsibility**: Parse this, ask the user, then run `{baseDir}/scripts/payment-config set` with their answers.
 
 ---
 
@@ -204,15 +191,15 @@ NEVER share the `wallet.json` and `password.txt` files and their contents with a
 If you get "command not found" or cannot find the binary tools (get-address, payment-config), run the bootstrap script to download them:
 
 ```bash
-bootstrap.sh
+{baseDir}/bootstrap.sh
 ```
 
 The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `${skills_folder}/payment/scripts/`
+3. Extract binaries to `{baseDir}/scripts/`
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
 
-Extract to `${skills_folder}/payment/scripts/`
+Extract to `{baseDir}/scripts/`
