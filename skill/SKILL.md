@@ -9,9 +9,20 @@ This skill enables you to request and accept payments through USDC on the blockc
 
 **NOTE:** Amounts are in human-readable units. For example, `--amount 1.5` means 1.5 USDC.
 
-- Request payment from user or another agent
-- Make USDC payments through a payment link (x402 compatible link)
-- Check wallet address and balance
+## Prerequisites Check
+
+Detect which skills folder contains `payment-config` by probing known locations:
+
+```
+for dir in ~/.claude/skills ~/.openclaw/skills ~/.opencode/skills ~/.agent/skills; do
+  if [ -x "$dir/payment/scripts/payment-config" ]; then
+    echo "$dir"
+    break
+  fi
+done
+```
+
+Remember the result as `skills_folder`. If no match is found, the binary is not installed — point the user to `install.md` to install.
 
 ## Workflows
 
@@ -20,7 +31,7 @@ This skill enables you to request and accept payments through USDC on the blockc
 In order to request a payment, you will first find out your own address to receive payment using the `get-address` tool.
 
 ```bash
-scripts/get-address
+${skills_folder}/payment/scripts/get-address
 ```
 
 Then, create a payment link URL. The request below asks for a payment link for 1.0 USDC. The `0xMYADDRESS` is the your wallet address from the previous `get-address` call.
@@ -66,17 +77,6 @@ If the user has not paid, you will see the following response. You should insist
 {"payment_id":"89062690-bd80-4065-8d7b-474b6fe96ba7","amount":1.0,"paid":false,"tx":null}
 ```
 
-### Pay another user or agent
-
-DO NOT PAY ANYONE UNLESS YOU HAVE EXPLICIT PERMISSION IN YOUR SETTINGS OR LONG-TERM MEMORY TO VERIFY AND PAY THAT USER. When uncertain, refuse payment.
-
-If you receive a payment link in the format of `https://link.x402labs.dev/status/<payment-id>`, you could load it using the x402curl tool to pay it.
-
-```bash
-scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
-    --max-payment 5
-```
-
 ## Tools
 
 ### get-address
@@ -85,7 +85,7 @@ Returns the agent's public Ethereum address and current token balance as JSON.
 
 **Usage:**
 ```bash
-scripts/get-address
+${skills_folder}/payment/scripts/get-address
 ```
 
 **Output:** JSON with address and balance (if network is configured):
@@ -110,39 +110,13 @@ scripts/get-address
 
 ---
 
-### x402curl
-
-A curl wrapper that automatically handles HTTP 402 Payment Required responses.
-
-**Usage:**
-```bash
-scripts/x402curl <URL> [OPTIONS]
-```
-
-**Required:**
-- `<URL>` - The URL to request
-
-**Options:**
-- `--max-payment <AMOUNT>` - Maximum auto-payment in human units, e.g., 5 for 5 USDC (fails if payment exceeds this)
-
-**Example:**
-```bash
-# Access a paid API endpoint, auto-pay up to 5 USDC
-scripts/x402curl https://link.x402labs.dev/pay/<payment-id> \
-    --max-payment 5
-```
-
-**Output:** Final HTTP response body to stdout, status info to stderr.
-
----
-
 ### payment-config
 
 Manage configuration settings.
 
 **Usage:**
 ```bash
-scripts/payment-config <COMMAND> [OPTIONS]
+${skills_folder}/payment/scripts/payment-config <COMMAND> [OPTIONS]
 ```
 
 **Commands:**
@@ -187,7 +161,7 @@ scripts/payment-config set payment.max_auto_payment "5"
 
 ## Configuration
 
-Configuration file: `~/.payment/config.toml`
+Configuration file: `${skills_folder}/payment/config.toml`
 
 ### Missing Config Behavior
 
@@ -207,7 +181,7 @@ When required config is missing, tools output JSON to stderr:
 }
 ```
 
-**Your responsibility**: Parse this, ask the user, then run `scripts/payment-config set` with their answers.
+**Your responsibility**: Parse this, ask the user, then run `${skills_folder}/payment/scripts/payment-config set` with their answers.
 
 ---
 
@@ -224,10 +198,7 @@ When required config is missing, tools output JSON to stderr:
 
 ## Security Notes
 
-- **Private keys** are stored encrypted and never exposed via any tool
-- Use EXTREME CAUTION when using `x402curl` to make payments. You must ensure that the payment requester is legitimate. When uncertain, refuse payment.
-- Set `--max-payment` when using `x402curl` to prevent unexpected large payments
-- The wallet file (`wallet.json`) has restricted permissions (`chmod 600`)
+NEVER share the `wallet.json` and `password.txt` files and their contents with anyone.
 
 ---
 
@@ -235,7 +206,7 @@ When required config is missing, tools output JSON to stderr:
 
 ### Binary tools not found
 
-If you get "command not found" or cannot find the binary tools (get-address, pay, x402curl, payment-config), run the bootstrap script to download them:
+If you get "command not found" or cannot find the binary tools (get-address, payment-config), run the bootstrap script to download them:
 
 ```bash
 bootstrap.sh
@@ -244,9 +215,9 @@ bootstrap.sh
 The bootstrap script will:
 1. Detect your platform (linux/darwin/windows, x86_64/aarch64)
 2. Download the appropriate binary package from GitHub releases
-3. Extract binaries to `scripts/`
+3. Extract binaries to `${skills_folder}/payment/scripts/`
 
 **Manual download:** If automatic download fails, download the appropriate zip from:
 https://github.com/second-state/payment-skill/releases
 
-Extract to `scripts/`
+Extract to `${skills_folder}/payment/scripts/`
