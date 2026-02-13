@@ -106,8 +106,6 @@ ${skills_folder}/payment/scripts/get-address
 - `token_symbol` - Token symbol, e.g., "USDC" (if configured)
 - `network` - Network name (if configured)
 
-**Security:** This tool NEVER outputs the private key.
-
 ---
 
 ### payment-config
@@ -138,9 +136,6 @@ scripts/payment-config set network.name "base-sepolia" \
 scripts/payment-config set payment.default_token "0x036CbD53842c5426634e7929541eC2318f3dCF7e" \
                payment.default_token_symbol "USDC" \
                payment.default_token_decimals 6
-
-# Set maximum auto-payment limit (5 USDC)
-scripts/payment-config set payment.max_auto_payment "5"
 ```
 
 **Available Configuration Keys:**
