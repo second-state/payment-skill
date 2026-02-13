@@ -20,7 +20,7 @@ mkdir -p "$SKILL_DIR"
 
 # Clone the skill directory
 git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
-cp -r /tmp/payment-skill-repo/skill/* "$SKILL_DIR"
+cp -r /tmp/payment-skill-repo/skills/payment/* "$SKILL_DIR"
 rm -rf /tmp/payment-skill-repo
 
 # Download platform-specific binaries
