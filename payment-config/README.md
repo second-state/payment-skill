@@ -70,8 +70,8 @@ Configuration is stored in `config.toml` (in the skill root directory):
 
 ```toml
 [wallet]
-path = "../wallet.json"
-password_file = "../password.txt"
+path = "wallet.json"
+password_file = "password.txt"
 
 [network]
 name = "base-sepolia"

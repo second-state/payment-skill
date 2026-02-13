@@ -1,5 +1,5 @@
 use crate::error::{Error, Result};
-use crate::{default_config_path, ensure_data_dir, exe_dir};
+use crate::{default_config_path, default_data_dir, ensure_data_dir};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -23,11 +23,11 @@ pub struct WalletConfig {
 }
 
 fn default_wallet_path_string() -> String {
-    "../wallet.json".to_string()
+    "wallet.json".to_string()
 }
 
 fn default_password_path_string() -> String {
-    "../password.txt".to_string()
+    "password.txt".to_string()
 }
 
 impl Default for WalletConfig {
@@ -103,24 +103,24 @@ impl Config {
         Ok(())
     }
 
-    /// Get the wallet path from config, resolving relative paths against the executable directory
+    /// Get the wallet path from config, resolving relative paths against the data directory
     pub fn wallet_path(&self) -> PathBuf {
         resolve_path(&self.wallet.path)
     }
 
-    /// Get the password file path from config, resolving relative paths against the executable directory
+    /// Get the password file path from config, resolving relative paths against the data directory
     pub fn password_path(&self) -> PathBuf {
         resolve_path(&self.wallet.password_file)
     }
 }
 
-/// Resolve a path: absolute paths are used as-is, relative paths are resolved against the executable directory
+/// Resolve a path: absolute paths are used as-is, relative paths are resolved against the data directory
 fn resolve_path(path: &str) -> PathBuf {
     let p = PathBuf::from(path);
     if p.is_absolute() {
         p
     } else {
-        exe_dir().join(p)
+        default_data_dir().join(p)
     }
 }
 
@@ -318,8 +318,8 @@ mod tests {
     #[test]
     fn test_default_config() {
         let config = Config::default();
-        assert_eq!(config.wallet.path, "../wallet.json");
-        assert_eq!(config.wallet.password_file, "../password.txt");
+        assert_eq!(config.wallet.path, "wallet.json");
+        assert_eq!(config.wallet.password_file, "password.txt");
         assert!(config.network.chain_id.is_none());
     }
 

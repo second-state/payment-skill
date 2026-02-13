@@ -189,8 +189,8 @@ Default config location: `config.toml` in the skill root directory (resolved rel
 
 ```toml
 [wallet]
-path = "../wallet.json"
-password_file = "../password.txt"
+path = "wallet.json"
+password_file = "password.txt"
 
 [network]
 # Default blockchain network
