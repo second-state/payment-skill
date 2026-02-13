@@ -110,18 +110,11 @@ download_binaries() {
 
 # Ensure config file exists
 ensure_config() {
-    local config_dir="${HOME}/.payment"
-    local config_file="${config_dir}/config.toml"
+    local config_file="${SKILL_DIR}/config.toml"
     local default_config="${SKILL_DIR}/config-default.toml"
 
     if [ ! -f "$config_file" ]; then
         echo "Creating default config at ${config_file}..." >&2
-
-        # Create directory if it doesn't exist
-        if [ ! -d "$config_dir" ]; then
-            mkdir -p "$config_dir"
-            chmod 700 "$config_dir"
-        fi
 
         # Copy default config
         if [ -f "$default_config" ]; then
