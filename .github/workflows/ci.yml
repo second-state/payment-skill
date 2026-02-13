@@ -91,16 +91,16 @@ jobs:
         shell: bash
         run: |
           cd target/${{ matrix.target }}/release
-          chmod +x create-wallet get-address pay x402curl payment-config
+          chmod +x create-wallet get-address pay payment-config
           zip ../../../artifacts/${{ matrix.artifact_name }}.zip \
-            create-wallet get-address pay x402curl payment-config
+            create-wallet get-address pay payment-config
 
       - name: Package binaries (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
           cd target/${{ matrix.target }}/release
-          Compress-Archive -Path create-wallet.exe,get-address.exe,pay.exe,x402curl.exe,payment-config.exe `
+          Compress-Archive -Path create-wallet.exe,get-address.exe,pay.exe,payment-config.exe `
             -DestinationPath ../../../artifacts/${{ matrix.artifact_name }}.zip
 
       - name: Verify static linking (Linux)
@@ -255,7 +255,6 @@ jobs:
           ./get-address --help
           ./create-wallet --help
           ./pay --help
-          ./x402curl --help
           ./payment-config --help
 
       - name: Verify static linking (Linux)
@@ -293,5 +292,96 @@ jobs:
           .\get-address.exe --help
           .\create-wallet.exe --help
           .\pay.exe --help
-          .\x402curl.exe --help
           .\payment-config.exe --help
+
+  # Integration test: wallet creation, address retrieval, payment link
+  integration-test:
+    name: Integration Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Linux x86_64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: payment-linux-x86_64
+          path: .
+
+      - name: Set up skill directory
+        run: |
+          # Create the skill directory layout: binaries in scripts/, data files in parent
+          SKILL_DIR="${HOME}/.openclaw/skills/payment"
+          mkdir -p "${SKILL_DIR}/scripts"
+
+          # Extract binaries into scripts/
+          unzip payment-linux-x86_64.zip -d "${SKILL_DIR}/scripts"
+          chmod +x "${SKILL_DIR}/scripts/"*
+
+          # Copy default config
+          cp skills/payment/config-default.toml "${SKILL_DIR}/config.toml"
+
+          echo "SKILL_DIR=${SKILL_DIR}" >> "$GITHUB_ENV"
+
+      - name: Configure network (base-mainnet)
+        run: |
+          "${SKILL_DIR}/scripts/payment-config" show
+          echo "=== Config verified ==="
+
+      - name: Create wallet
+        run: |
+          ADDRESS=$("${SKILL_DIR}/scripts/create-wallet" 2>/dev/null)
+          echo "Created wallet with address: ${ADDRESS}"
+
+          # Verify address format (0x + 40 hex chars)
+          if [[ ! "${ADDRESS}" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
+            echo "ERROR: Invalid address format: ${ADDRESS}"
+            exit 1
+          fi
+
+          echo "WALLET_ADDRESS=${ADDRESS}" >> "$GITHUB_ENV"
+
+      - name: Get address and verify
+        run: |
+          OUTPUT=$("${SKILL_DIR}/scripts/get-address" 2>/dev/null)
+          echo "get-address output: ${OUTPUT}"
+
+          # Verify JSON output contains the address
+          ADDR=$(echo "${OUTPUT}" | jq -r '.address')
+          if [[ -z "${ADDR}" || "${ADDR}" == "null" ]]; then
+            echo "ERROR: No address in get-address output"
+            exit 1
+          fi
+
+          echo "Verified address: ${ADDR}"
+
+      - name: Create payment link
+        run: |
+          ADDR=$(echo "$("${SKILL_DIR}/scripts/get-address" 2>/dev/null)" | jq -r '.address')
+
+          echo "Creating payment link for 0.01 USDC to ${ADDR}..."
+          RESPONSE=$(curl -s "https://link.x402labs.dev/create-payment-link?amount=0.01&receiver=${ADDR}")
+          echo "Response: ${RESPONSE}"
+
+          # Verify response contains payment_url
+          PAYMENT_URL=$(echo "${RESPONSE}" | jq -r '.payment_url')
+          if [[ -z "${PAYMENT_URL}" || "${PAYMENT_URL}" == "null" ]]; then
+            echo "ERROR: No payment_url in response"
+            exit 1
+          fi
+
+          echo "Payment link created: ${PAYMENT_URL}"
+
+          # Verify payment status (should be unpaid)
+          PAYMENT_ID=$(echo "${RESPONSE}" | jq -r '.payment_id')
+          STATUS=$(curl -s "https://link.x402labs.dev/status/${PAYMENT_ID}")
+          echo "Payment status: ${STATUS}"
+
+          PAID=$(echo "${STATUS}" | jq -r '.paid')
+          if [[ "${PAID}" != "false" ]]; then
+            echo "ERROR: Expected paid=false, got paid=${PAID}"
+            exit 1
+          fi
+
+          echo "=== Integration test passed ==="

@@ -24,9 +24,6 @@ toml = "0.8"
 thiserror = "2"
 anyhow = "1"
 
-# File system
-dirs = "6"
-
 # Random generation
 rand = "0.8"
 

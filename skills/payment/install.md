@@ -35,8 +35,8 @@ After installation, create a wallet and fund it. The default network is **base-m
 
 Ask the user to give you his existing `wallet.json` file and its password. 
 
-- Save the `wallet.json` file to `~/.claude/skills/payment/`
-- Save the password as the content of the `~/.openclaw/skills/payment/password.txt` file
+- Save the `wallet.json` file to the skill root directory (e.g., `~/.openclaw/skills/payment/`)
+- Save the password as the content of the `password.txt` file in the skill root directory
 
 ### Create a new wallet
 

@@ -48,7 +48,7 @@ x402_skill/
 
 **Inputs**:
 - `--password <PASSWORD>` (optional): Password to encrypt the wallet keystore
-- `--output <PATH>` (optional): Path to store the encrypted keystore (default: `~/.payment/wallet.json`)
+- `--output <PATH>` (optional): Path to store the encrypted keystore (default: `wallet.json` in skill root)
 
 **Outputs**:
 - Creates encrypted keystore file
@@ -73,7 +73,7 @@ x402_skill/
 **Purpose**: Retrieve the agent's public Ethereum address from the stored wallet.
 
 **Inputs**:
-- `--wallet <PATH>` (optional): Path to keystore file (default: `~/.payment/wallet.json`)
+- `--wallet <PATH>` (optional): Path to keystore file (default: `wallet.json` in skill root)
 
 **Outputs**:
 - Prints the public address (0x-prefixed, checksummed) to stdout
@@ -177,7 +177,7 @@ x402_skill/
 
 Consider creating a shared library crate (`payment-common`) for:
 - Wallet loading/decryption
-- Configuration file handling (`~/.payment/config.toml`)
+- Configuration file handling (`config.toml` in skill root)
 - Common types and error handling
 - Auto-initialization logic
 
@@ -185,12 +185,12 @@ Consider creating a shared library crate (`payment-common`) for:
 
 ## Configuration
 
-Default config location: `~/.payment/config.toml`
+Default config location: `config.toml` in the skill root directory (resolved relative to the executable binary).
 
 ```toml
 [wallet]
-path = "~/.payment/wallet.json"
-password_file = "~/.payment/password.txt"
+path = "wallet.json"
+password_file = "password.txt"
 
 [network]
 # Default blockchain network
@@ -300,7 +300,7 @@ payment-config init
 ```
 
 **Behavior:**
-- Creates `~/.payment/` directory if it doesn't exist
+- Creates the skill root directory if it doesn't exist
 - Creates `config.toml` if it doesn't exist
 - Validates values where possible (e.g., chain_id is numeric, rpc_url is valid URL)
 

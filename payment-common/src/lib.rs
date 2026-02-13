@@ -8,24 +8,29 @@ pub use wallet::{Wallet, WalletInfo};
 
 use std::path::PathBuf;
 
-/// Get the default x402 data directory (~/.payment)
+/// Get the default data directory (parent of the directory containing the executable).
+///
+/// Given the installed layout where binaries live in `scripts/`, this returns the
+/// skill root directory (e.g., `~/.openclaw/skills/payment/`).
 pub fn default_data_dir() -> PathBuf {
-    dirs::home_dir()
+    std::env::current_exe()
+        .ok()
+        .and_then(|exe| exe.parent().map(|p| p.to_path_buf()))
+        .and_then(|dir| dir.parent().map(|p| p.to_path_buf()))
         .unwrap_or_else(|| PathBuf::from("."))
-        .join(".payment")
 }
 
-/// Get the default wallet path (~/.payment/wallet.json)
+/// Get the default wallet path (data_dir/wallet.json)
 pub fn default_wallet_path() -> PathBuf {
     default_data_dir().join("wallet.json")
 }
 
-/// Get the default password file path (~/.payment/password.txt)
+/// Get the default password file path (data_dir/password.txt)
 pub fn default_password_path() -> PathBuf {
     default_data_dir().join("password.txt")
 }
 
-/// Get the default config path (~/.payment/config.toml)
+/// Get the default config path (data_dir/config.toml)
 pub fn default_config_path() -> PathBuf {
     default_data_dir().join("config.toml")
 }
