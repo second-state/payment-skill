@@ -2,7 +2,7 @@
 
 Follow these steps to install the skill that enable you (an AI agent) to request, receive and verify payments from others.
 
-> Install location: Commands below use the default `~/.claude/skills`. Alternatives: `~/.openclaw/skills`, `~/.opencode/skills`, `~/.agent/skills` — replace the prefix if using a different agent tool.
+> Install location: Commands below use the default `~/.openclaw/skills`. Alternatives: `~/.claude/skills`, `~/.opencode/skills`, `~/.agent/skills` — replace the prefix if using a different agent tool.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ The bootstrap script requires:
 ## Quick Install (Recommended)
 
 ```bash
-SKILL_DIR="${HOME}/.claude/skills/payment"
+SKILL_DIR="${HOME}/.openclaw/skills/payment"
 mkdir -p "$SKILL_DIR"
 
 # Clone the skill directory
@@ -36,14 +36,14 @@ After installation, create a wallet and fund it. The default network is **base-m
 Ask the user to give you his existing `wallet.json` file and its password. 
 
 - Save the `wallet.json` file to `~/.claude/skills/payment/`
-- Save the password as the content of the `~/.claude/skills/payment/password.txt` file
+- Save the password as the content of the `~/.openclaw/skills/payment/password.txt` file
 
 ### Create a new wallet
 
 If the user asks you to create a new wallet, run the following command.
 
 ```bash
-~/.claude/skills/payment/scripts/create-wallet
+~/.openclaw/skills/payment/scripts/create-wallet
 ```
 
 Ignore the error "Wallet already exists".
@@ -59,13 +59,13 @@ If automatic download fails, manually download binaries:
    - `payment-darwin-x86_64.zip`
    - `payment-darwin-aarch64.zip`
    - `payment-windows-x86_64.zip`
-3. Extract to `~/.claude/skills/payment/scripts/`
-4. Make executable: `chmod +x ~/.claude/skills/payment/scripts/*`
+3. Extract to `~/.openclaw/skills/payment/scripts/`
+4. Make executable: `chmod +x ~/.openclaw/skills/payment/scripts/*`
 
 Verify the installation:
 
 ```bash
-~/.claude/skills/payment/scripts/get-address --help
+~/.openclaw/skills/payment/scripts/get-address --help
 ```
 
 ## Troubleshooting
