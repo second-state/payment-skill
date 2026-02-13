@@ -80,13 +80,15 @@ The data directory is determined at runtime via `std::env::current_exe()` — ea
 
 ## Skill Directory Structure
 
-The `skill/` directory contains everything needed for Claude agents to use x402 payments:
+The `skills/payment/` directory contains everything needed for Claude agents to use payments:
 
 ```
-skill/
-├── bootstrap.sh     # Downloads platform-specific binaries on first run
-├── SKILL.md         # Instructions for Claude on how to use the tools
-└── scripts/         # CLI binaries installed here by bootstrap.sh
+skills/payment/
+├── bootstrap.sh         # Downloads platform-specific binaries on first run
+├── config-default.toml  # Default configuration template
+├── install.md           # Installation instructions for AI agents
+├── SKILL.md             # Instructions for Claude on how to use the tools
+└── scripts/             # CLI binaries installed here by bootstrap.sh
     ├── create-wallet
     ├── get-address
     ├── pay
@@ -95,11 +97,11 @@ skill/
 
 ### How Installation Works
 
-1. **Clone skill files**: The install script copies the `skill/` directory to `~/.claude/skills/payment/`
+1. **Clone skill files**: The install script copies the `skills/payment/` directory to `~/.openclaw/skills/payment/`
 
 2. **Bootstrap binaries**: Running `bootstrap.sh` detects your platform (OS + architecture) and downloads the appropriate pre-compiled binaries from GitHub Releases
 
-3. **Binary installation**: Binaries are extracted to `~/.claude/skills/payment/skill/scripts/` and made executable
+3. **Binary installation**: Binaries are extracted to `~/.openclaw/skills/payment/scripts/` and made executable
 
 Supported platforms:
 - Linux x86_64 / aarch64
@@ -109,15 +111,17 @@ Supported platforms:
 ### Final installed structure
 
 ```
-~/.claude/skills/payment/
-└── skill/
-    ├── bootstrap.sh
-    ├── SKILL.md
-    └── scripts/
-        ├── create-wallet
-        ├── get-address
-        ├── pay
-        └── payment-config
+~/.openclaw/skills/payment/
+├── bootstrap.sh
+├── config.toml          # Created from config-default.toml
+├── wallet.json          # Created by create-wallet
+├── password.txt         # Auto-generated wallet password
+├── SKILL.md
+└── scripts/
+    ├── create-wallet
+    ├── get-address
+    ├── pay
+    └── payment-config
 ```
 
 ## Development
@@ -131,7 +135,6 @@ This is a Rust workspace with the following crates:
 | `get-address` | Address retrieval CLI |
 | `pay` | Token payment CLI |
 | `payment-config` | Configuration management CLI |
-| `x402curl` | HTTP client with x402 payment support (coming soon) |
 
 ### Building
 
@@ -147,7 +150,7 @@ cargo test
 
 ### Cross-compilation
 
-The project uses GitHub Actions to build binaries for all supported platforms. See `.github/workflows/release.yml` for the CI configuration.
+The project uses GitHub Actions to build binaries for all supported platforms. See `.github/workflows/ci.yml` for the CI configuration.
 
 ## License
 

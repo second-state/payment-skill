@@ -91,16 +91,16 @@ jobs:
         shell: bash
         run: |
           cd target/${{ matrix.target }}/release
-          chmod +x create-wallet get-address pay x402curl payment-config
+          chmod +x create-wallet get-address pay payment-config
           zip ../../../artifacts/${{ matrix.artifact_name }}.zip \
-            create-wallet get-address pay x402curl payment-config
+            create-wallet get-address pay payment-config
 
       - name: Package binaries (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
           cd target/${{ matrix.target }}/release
-          Compress-Archive -Path create-wallet.exe,get-address.exe,pay.exe,x402curl.exe,payment-config.exe `
+          Compress-Archive -Path create-wallet.exe,get-address.exe,pay.exe,payment-config.exe `
             -DestinationPath ../../../artifacts/${{ matrix.artifact_name }}.zip
 
       - name: Verify static linking (Linux)
@@ -255,7 +255,6 @@ jobs:
           ./get-address --help
           ./create-wallet --help
           ./pay --help
-          ./x402curl --help
           ./payment-config --help
 
       - name: Verify static linking (Linux)
@@ -293,5 +292,4 @@ jobs:
           .\get-address.exe --help
           .\create-wallet.exe --help
           .\pay.exe --help
-          .\x402curl.exe --help
           .\payment-config.exe --help

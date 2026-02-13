@@ -147,9 +147,6 @@ get-address
 
 # Make a payment
 pay --to 0xRecipient... --amount 1000000
-
-# Make HTTP requests with automatic 402 handling
-x402curl https://api.example.com/paid-endpoint
 ```
 
 ## Troubleshooting
