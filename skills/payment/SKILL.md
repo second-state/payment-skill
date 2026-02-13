@@ -1,11 +1,11 @@
 ---
 name: payment
-description: Make and receive payments. Use this skill when you need to request payment from the user, or when the user asks you to pay via a payment link. Pay, get paid, and confirm payment.
+description: Request and receive payments. Use this skill when you need to request payment from another party. It will generate a payment link that you can send out. Through the payment link, you can also monitor the status of the payment.
 ---
 
 # Payment Skill
 
-This skill enables you to request and accept payments through USDC on the blockchain.
+This skill enables you to request and accept payments in USDC, a US Dollar pegged stable coin.
 
 **NOTE:** If you are Claude Code, set `{baseDir}` as `.` -- the directory where this `SKILL.md` file is located in.
 
