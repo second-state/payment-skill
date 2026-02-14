@@ -80,28 +80,33 @@ The data directory is determined at runtime via `std::env::current_exe()` — ea
 
 ## Skill Directory Structure
 
-The `skills/payment/` directory contains everything needed for Claude agents to use payments:
+Platform-specific skill files live under `claude/` and `openclaw/`:
 
 ```
-skills/payment/
-├── bootstrap.sh         # Downloads platform-specific binaries on first run
-├── config-default.toml  # Default configuration template
-├── install.md           # Installation instructions for AI agents
-├── SKILL.md             # Instructions for Claude on how to use the tools
-└── scripts/             # CLI binaries installed here by bootstrap.sh
-    ├── create-wallet
-    ├── get-address
-    ├── pay
-    └── payment-config
+claude/skills/payment/       # For Claude Code
+├── bootstrap.sh
+├── config-default.toml
+├── install.md
+├── SKILL.md
+└── scripts/
+
+openclaw/skills/payment/     # For OpenClaw
+├── bootstrap.sh
+├── config-default.toml
+├── install.md
+├── SKILL.md
+└── scripts/
 ```
 
 ### How Installation Works
 
-1. **Clone skill files**: The install script copies the `skills/payment/` directory to `~/.openclaw/skills/payment/`
+1. **Clone skill files**: The install script copies the platform-specific directory to the agent's skill path:
+   - Claude Code: `~/.claude/skills/payment/`
+   - OpenClaw: `~/.openclaw/skills/payment/`
 
 2. **Bootstrap binaries**: Running `bootstrap.sh` detects your platform (OS + architecture) and downloads the appropriate pre-compiled binaries from GitHub Releases
 
-3. **Binary installation**: Binaries are extracted to `~/.openclaw/skills/payment/scripts/` and made executable
+3. **Binary installation**: Binaries are extracted to the `scripts/` subdirectory and made executable
 
 Supported platforms:
 - Linux x86_64 / aarch64
@@ -111,7 +116,7 @@ Supported platforms:
 ### Final installed structure
 
 ```
-~/.openclaw/skills/payment/
+~/.claude/skills/payment/          # (or ~/.openclaw/skills/payment/)
 ├── bootstrap.sh
 ├── config.toml          # Created from config-default.toml
 ├── wallet.json          # Created by create-wallet
