@@ -13,12 +13,12 @@ The bootstrap script requires:
 ## Quick Install (Recommended)
 
 ```bash
-SKILL_DIR="${HOME}/.openclaw/skills/payment"
+SKILL_DIR="${HOME}/.claude/skills/payment"
 mkdir -p "$SKILL_DIR"
 
 # Clone the skill directory
 git clone --depth 1 https://github.com/second-state/payment-skill.git /tmp/payment-skill-repo
-cp -r /tmp/payment-skill-repo/skills/payment/* "$SKILL_DIR"
+cp -r /tmp/payment-skill-repo/claude/skills/payment/* "$SKILL_DIR"
 rm -rf /tmp/payment-skill-repo
 
 # Download platform-specific binaries
@@ -33,7 +33,7 @@ After installation, create a wallet and fund it. The default network is **base-m
 
 Ask the user to give you his existing `wallet.json` file and its password. 
 
-- Save the `wallet.json` file to the skill root directory (e.g., `~/.openclaw/skills/payment/`)
+- Save the `wallet.json` file to the skill root directory (e.g., `~/.claude/skills/payment/`)
 - Save the password as the content of the `password.txt` file in the skill root directory
 
 ### Create a new wallet
@@ -41,7 +41,7 @@ Ask the user to give you his existing `wallet.json` file and its password.
 If the user asks you to create a new wallet, run the following command.
 
 ```bash
-~/.openclaw/skills/payment/scripts/create-wallet
+~/.claude/skills/payment/scripts/create-wallet
 ```
 
 Ignore the error "Wallet already exists".
@@ -57,13 +57,13 @@ If automatic download fails, manually download binaries:
    - `payment-darwin-x86_64.zip`
    - `payment-darwin-aarch64.zip`
    - `payment-windows-x86_64.zip`
-3. Extract to `~/.openclaw/skills/payment/scripts/`
-4. Make executable: `chmod +x ~/.openclaw/skills/payment/scripts/*`
+3. Extract to `~/.claude/skills/payment/scripts/`
+4. Make executable: `chmod +x ~/.claude/skills/payment/scripts/*`
 
 Verify the installation:
 
 ```bash
-~/.openclaw/skills/payment/scripts/get-address --help
+~/.claude/skills/payment/scripts/get-address --help
 ```
 
 ## Troubleshooting
