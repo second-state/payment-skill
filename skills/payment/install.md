@@ -2,8 +2,6 @@
 
 Follow these steps to install the skill that enable you (an AI agent) to request, receive and verify payments from others.
 
-> Install location: Commands below use the default `~/.openclaw/skills`. Alternatives: `~/.claude/skills`, `~/.opencode/skills`, `~/.agent/skills` — replace the prefix if using a different agent tool.
-
 ## Prerequisites
 
 The bootstrap script requires:
