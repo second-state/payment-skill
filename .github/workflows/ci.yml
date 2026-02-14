@@ -296,9 +296,19 @@ jobs:
 
   # Integration test: wallet creation, address retrieval, payment link
   integration-test:
-    name: Integration Test
+    name: Integration Test - ${{ matrix.platform }}
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: openclaw
+            skill_source: openclaw/skills/payment
+            install_dir: .openclaw/skills/payment
+          - platform: claude
+            skill_source: claude/skills/payment
+            install_dir: .claude/skills/payment
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -312,15 +322,15 @@ jobs:
       - name: Set up skill directory
         run: |
           # Create the skill directory layout: binaries in scripts/, data files in parent
-          SKILL_DIR="${HOME}/.openclaw/skills/payment"
+          SKILL_DIR="${HOME}/${{ matrix.install_dir }}"
           mkdir -p "${SKILL_DIR}/scripts"
 
           # Extract binaries into scripts/
           unzip payment-linux-x86_64.zip -d "${SKILL_DIR}/scripts"
           chmod +x "${SKILL_DIR}/scripts/"*
 
-          # Copy default config
-          cp skills/payment/config-default.toml "${SKILL_DIR}/config.toml"
+          # Copy default config from platform-specific source
+          cp ${{ matrix.skill_source }}/config-default.toml "${SKILL_DIR}/config.toml"
 
           echo "SKILL_DIR=${SKILL_DIR}" >> "$GITHUB_ENV"
 
