@@ -1,0 +1,13 @@
+[wallet]
+path = "wallet.json"
+password_file = "password.txt"
+
+[network]
+name = "base-mainnet"
+chain_id = 8453
+rpc_url = "https://mainnet.base.org"
+
+[payment]
+default_token = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+default_token_symbol = "USDC"
+default_token_decimals = 6

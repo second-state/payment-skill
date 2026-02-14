@@ -7,8 +7,6 @@ description: Request and receive payments. Use this skill when you need to reque
 
 This skill enables you to request and accept payments in USDC, a US Dollar pegged stable coin.
 
-**NOTE:** If you are Claude Code, set `{baseDir}` as `.` -- the directory where this `SKILL.md` file is located in.
-
 **NOTE:** Amounts are in human-readable units. For example, `--amount 1.5` means 1.5 USDC.
 
 ## Workflow
