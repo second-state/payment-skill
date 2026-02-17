@@ -75,7 +75,19 @@
         .hero-tabs {
             display: flex;
             gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .hero-tabs:last-of-type {
             margin-bottom: 40px;
+        }
+
+        .tab-label {
+            color: #a3a3a3;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            align-self: center;
         }
 
         .tab {
@@ -306,17 +318,47 @@
         /* Responsive */
         @media (max-width: 640px) {
             h1 {
-                font-size: 36px;
+                font-size: 28px;
             }
 
             .subtitle {
-                font-size: 18px;
+                font-size: 16px;
+                margin-bottom: 40px;
             }
 
             .header-content {
                 flex-direction: column;
                 gap: 16px;
                 align-items: flex-start;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .hero-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .tab-label {
+                font-size: 13px;
+                width: 100%;
+                margin-bottom: -4px;
+            }
+
+            .code-block {
+                padding: 16px;
+                padding-right: 40px;
+            }
+
+            .code-block code {
+                font-size: 12px;
+                word-break: break-all;
             }
         }
     </style>
@@ -326,14 +368,22 @@
         <div class="container">
             <div class="header-content">
                 <div class="brand">
-                    <img src="/payment-logo.svg" alt="Payment Skill for Agent">
+                    <img src="payment-logo.svg" alt="Payment Skill for Agent">
                 </div>
-                <a href="https://github.com/second-state/payment-skill" class="github-button" target="_blank">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
-                    GitHub
-                </a>
+                <div style="display: flex; gap: 8px;">
+                    <a href="https://github.com/second-state/payment-skill" class="github-button" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        payment-skill
+                    </a>
+                    <a href="https://github.com/second-state/x402-skill" class="github-button" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        x402-skill
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -341,19 +391,26 @@
     <main class="container">
         <div class="hero">
             <h1>Request, accept, and make payments by your AI agent</h1>
-            <p class="subtitle">An agentic skill to handle payments. Enables AI agents to sell services to humans and each other! <span style="color: #ff6b35;">Built with Rust</span></p>
+            <p class="subtitle">Agentic skills to handle payments. Enables AI agents to request payments and / or sell services to humans and each other! <span style="color: #ff6b35;">Built with Rust</span></p>
 
-            <nav class="hero-tabs">
-                <button class="tab" data-tab="claude-code">Claude Code</button>
-                <button class="tab active" data-tab="openclaw">OpenClaw</button>
+            <nav class="hero-tabs" data-group="action">
+                <span class="tab-label">Choose a skill</span>
+                <button class="tab active" data-value="receive">Request and receive payments</button>
+                <button class="tab" data-value="make">Make payments</button>
             </nav>
 
-            <!-- Claude Code Tab Content -->
-            <div class="tab-content" id="claude-code">
+            <nav class="hero-tabs" data-group="agent">
+                <span class="tab-label">For agent</span>
+                <button class="tab" data-value="claude-code">Claude Code</button>
+                <button class="tab active" data-value="openclaw">OpenClaw</button>
+            </nav>
+
+            <!-- Receive + Claude Code -->
+            <div class="tab-content" id="receive-claude-code">
                 <div class="code-section">
                     <div class="code-label">Installation</div>
                     <div class="code-block">
-                        <button class="copy-button" data-copy="claude-code-instruction">
+                        <button class="copy-button" data-copy="receive-claude-code-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -362,7 +419,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </button>
-                        <code id="claude-code-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-claudecode.md and follow the instructions to set up the payment skill.</code>
+                        <code id="receive-claude-code-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/claude/skills/payment/install.md and follow the instructions to set up the skill to request and receive payments from agents and humans.</code>
                     </div>
                 </div>
 
@@ -390,12 +447,12 @@
                 </div>
             </div>
 
-            <!-- OpenClaw Tab Content -->
-            <div class="tab-content active" id="openclaw">
+            <!-- Receive + OpenClaw -->
+            <div class="tab-content active" id="receive-openclaw">
                 <div class="code-section">
                     <div class="code-label">Installation</div>
                     <div class="code-block">
-                        <button class="copy-button" data-copy="openclaw-instruction">
+                        <button class="copy-button" data-copy="receive-openclaw-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -404,7 +461,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </button>
-                        <code id="openclaw-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/install-openclaw.md and follow the instructions to set up the payment skill.</code>
+                        <code id="receive-openclaw-instruction">Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/openclaw/skills/payment/install.md and follow the instructions to set up the skill to request and receive payments from agents and humans.</code>
                     </div>
                 </div>
 
@@ -431,6 +488,90 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Make + Claude Code -->
+            <div class="tab-content" id="make-claude-code">
+                <div class="code-section">
+                    <div class="code-label">Installation</div>
+                    <div class="code-block">
+                        <button class="copy-button" data-copy="make-claude-code-instruction">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                        <code id="make-claude-code-instruction">Read https://raw.githubusercontent.com/second-state/x402-skill/refs/heads/master/claude/skills/x402/install.md and follow the instructions to set up the skill to make payments to x402-gated web or agent services.</code>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p><strong>Send this to your Claude Code</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p><strong>Tell them to pay for services</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p><strong>Become a more capable agent!</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Make + OpenClaw -->
+            <div class="tab-content" id="make-openclaw">
+                <div class="code-section">
+                    <div class="code-label">Installation</div>
+                    <div class="code-block">
+                        <button class="copy-button" data-copy="make-openclaw-instruction">
+                            <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </button>
+                        <code id="make-openclaw-instruction">Read https://raw.githubusercontent.com/second-state/x402-skill/refs/heads/master/openclaw/skills/x402/install.md and follow the instructions to set up the skill to make payments to x402-gated web or agent services.</code>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <p><strong>Send this to your OpenClaw bot</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <p><strong>Tell them to pay for services</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <p><strong>Become a more capable agent!</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -441,22 +582,25 @@
     </footer>
 
     <script>
-        // Tab switching functionality
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
+        // Track current selections
+        const selections = { action: 'receive', agent: 'openclaw' };
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
+        function updateContent() {
+            const id = selections.action + '-' + selections.agent;
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
 
-                // Add active class to clicked tab
-                tab.classList.add('active');
-
-                // Show corresponding content
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
+        // Tab switching for both groups
+        document.querySelectorAll('.hero-tabs').forEach(nav => {
+            const group = nav.getAttribute('data-group');
+            nav.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    nav.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    selections[group] = tab.getAttribute('data-value');
+                    updateContent();
+                });
             });
         });
 
