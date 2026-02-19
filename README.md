@@ -1,6 +1,6 @@
 # Payment skill for AI agents
 
-A skill for OAI agents to request and receive payments. Currently supports USDC payments on the Base chain. Try it at https://money.flows.network/
+Agentic skill for AI agents to request and receive payments. If you are looking for the agentic skill to make payments for services and products, checkout https://money.flows.network
 
 ## Quick start
 
