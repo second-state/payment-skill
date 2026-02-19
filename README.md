@@ -2,6 +2,18 @@
 
 A skill for OpenClaw / Claude Code / OpenCode to request and receive payments. Currently supports USDC payments on the Base chain. Try it at https://money.flows.network/
 
+## Quick start
+
+Copy and paste the following sentence to give your agent the ability to request and receive payments.
+
+For OpenClaw:
+
+> Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/openclaw/skills/payment/install.md and follow the instructions to set up the skill to request and receive payments from agents and humans.
+
+For Claude Code:
+
+> Read https://raw.githubusercontent.com/second-state/payment-skill/refs/heads/main/claude/skills/payment/install.md and follow the instructions to set up the skill to request and receive payments from agents and humans.
+
 ## Overview
 
 This project provides four CLI tools for Ethereum wallet management and token payments:
