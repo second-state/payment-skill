@@ -1,6 +1,6 @@
 # Payment skill for AI agents
 
-A skill for OpenClaw / Claude Code / OpenCode to make and receive payments. Currently supports USDC payments on the Base chain. Try it at https://money.flows.network/
+A skill for OpenClaw / Claude Code / OpenCode to request and receive payments. Currently supports USDC payments on the Base chain. Try it at https://money.flows.network/
 
 ## Overview
 
