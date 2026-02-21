@@ -88,7 +88,10 @@ All personal data is stored in the skill root directory (the parent of the `scri
 └── password.txt     # Wallet password (auto-generated, 600 permissions)
 ```
 
-The data directory is determined at runtime via `std::env::current_exe()` — each binary resolves paths relative to its own location (`../` from the `scripts/` directory).
+The data directory is resolved at runtime:
+- `PAYMENT_SKILL_DATA_DIR` if set
+- otherwise, `../` from the `scripts/` directory in installed skill layouts
+- otherwise, current working directory during local `cargo run` development
 
 ## Skill Directory Structure
 
@@ -171,4 +174,4 @@ The project uses GitHub Actions to build binaries for all supported platforms. S
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+License is declared as MIT in `Cargo.toml`. The project owner should provide the canonical license file.

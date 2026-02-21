@@ -37,5 +37,5 @@ Payment skill for AI agents (Claude Code, OpenClaw, OpenCode) to make and receiv
 - `get-address/` - Get wallet address and balance
 - `pay/` - Make payments
 - `payment-config/` - Configuration management
-- `x402curl/` - HTTP client with 402 payment handling
-- `skill/` - Skill files for Claude Code
+- `claude/skills/payment/` - Skill files for Claude Code
+- `openclaw/skills/payment/` - Skill files for OpenClaw
