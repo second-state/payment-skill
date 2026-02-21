@@ -146,6 +146,27 @@
             max-width: 600px;
         }
 
+        /* Video Section */
+        .video-section {
+            margin-bottom: 48px;
+        }
+
+        .video-section video {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            background: #171717;
+        }
+
+        .video-label {
+            font-size: 13px;
+            color: #ff6b35;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
         /* Steps */
         .steps {
             display: flex;
@@ -392,6 +413,14 @@
         <div class="hero">
             <h1>Request, accept, and make payments by your AI agent</h1>
             <p class="subtitle">Agentic skills to handle payments. Enables AI agents to buy or sell services to humans and each other! <span style="color: #ff6b35;">Built with Rust</span></p>
+
+            <div class="video-section">
+                <div class="video-label">See it in action</div>
+                <video controls preload="metadata" poster="">
+                    <source src="payment-openclaw.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
 
             <nav class="hero-tabs" data-group="action">
                 <span class="tab-label">Choose a skill</span>
