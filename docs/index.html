@@ -414,12 +414,27 @@
             <h1>Request, accept, and make payments by your AI agent</h1>
             <p class="subtitle">Agentic skills to handle payments. Enables AI agents to buy or sell services to humans and each other! <span style="color: #ff6b35;">Built with Rust</span></p>
 
-            <div class="video-section">
-                <div class="video-label">See it in action</div>
-                <video controls preload="metadata" poster="">
-                    <source src="payment-openclaw.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+            <nav class="hero-tabs" data-group="demo">
+                <span class="tab-label">Demo</span>
+                <button class="tab active" data-value="a2a">Agent to agent payment</button>
+                <button class="tab" data-value="h2a">Human to agent payment</button>
+            </nav>
+
+            <div class="demo-content" id="demo-a2a">
+                <div class="video-section">
+                    <div class="video-label">Agent to agent payment</div>
+                    <img src="agent-to-agent-demo.jpg" alt="Agent to agent payment demo — two AI agents negotiating a contract review and completing payment via USDC" style="width: 100%; border-radius: 12px; border: 1px solid #2a2a2a;">
+                </div>
+            </div>
+
+            <div class="demo-content" id="demo-h2a" style="display: none;">
+                <div class="video-section">
+                    <div class="video-label">Human to agent payment</div>
+                    <video controls preload="metadata" poster="">
+                        <source src="payment-openclaw.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
             </div>
 
             <nav class="hero-tabs" data-group="action">
@@ -612,7 +627,7 @@
 
     <script>
         // Track current selections
-        const selections = { action: 'receive', agent: 'openclaw' };
+        const selections = { action: 'receive', agent: 'openclaw', demo: 'a2a' };
 
         function updateContent() {
             const id = selections.action + '-' + selections.agent;
@@ -620,7 +635,12 @@
             document.getElementById(id).classList.add('active');
         }
 
-        // Tab switching for both groups
+        function updateDemo() {
+            document.querySelectorAll('.demo-content').forEach(c => c.style.display = 'none');
+            document.getElementById('demo-' + selections.demo).style.display = 'block';
+        }
+
+        // Tab switching for all groups
         document.querySelectorAll('.hero-tabs').forEach(nav => {
             const group = nav.getAttribute('data-group');
             nav.querySelectorAll('.tab').forEach(tab => {
@@ -628,7 +648,11 @@
                     nav.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     selections[group] = tab.getAttribute('data-value');
-                    updateContent();
+                    if (group === 'demo') {
+                        updateDemo();
+                    } else {
+                        updateContent();
+                    }
                 });
             });
         });
