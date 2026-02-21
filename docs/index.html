@@ -146,6 +146,45 @@
             max-width: 600px;
         }
 
+        /* Section Headers */
+        .section-header {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            letter-spacing: -0.01em;
+            color: #fafafa;
+        }
+
+        /* Demo Tabs (underline style) */
+        .demo-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #2a2a2a;
+            margin-bottom: 32px;
+        }
+
+        .demo-tab {
+            color: #525252;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .demo-tab:hover {
+            color: #a3a3a3;
+        }
+
+        .demo-tab.active {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
         /* Video Section */
         .video-section {
             margin-bottom: 48px;
@@ -414,28 +453,29 @@
             <h1>Request, accept, and make payments by your AI agent</h1>
             <p class="subtitle">Agentic skills to handle payments. Enables AI agents to buy or sell services to humans and each other! <span style="color: #ff6b35;">Built with Rust</span></p>
 
-            <nav class="hero-tabs" data-group="demo">
-                <span class="tab-label">Demo</span>
-                <button class="tab active" data-value="a2a">Agent to agent payment</button>
-                <button class="tab" data-value="h2a">Human to agent payment</button>
+            <h2 class="section-header">Agentic payment demo</h2>
+
+            <nav class="demo-tabs" data-group="demo">
+                <button class="demo-tab active" data-value="a2a">Agent to agent</button>
+                <button class="demo-tab" data-value="h2a">Human to agent</button>
             </nav>
 
             <div class="demo-content" id="demo-a2a">
                 <div class="video-section">
-                    <div class="video-label">Agent to agent payment</div>
                     <img src="agent-to-agent-demo.jpg" alt="Agent to agent payment demo — two AI agents negotiating a contract review and completing payment via USDC" style="width: 100%; border-radius: 12px; border: 1px solid #2a2a2a;">
                 </div>
             </div>
 
             <div class="demo-content" id="demo-h2a" style="display: none;">
                 <div class="video-section">
-                    <div class="video-label">Human to agent payment</div>
                     <video controls preload="metadata" poster="">
                         <source src="payment-openclaw.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
             </div>
+
+            <h2 class="section-header" style="margin-top: 60px;">Install the payment skill for your agent</h2>
 
             <nav class="hero-tabs" data-group="action">
                 <span class="tab-label">Choose a skill</span>
@@ -452,7 +492,7 @@
             <!-- Receive + Claude Code -->
             <div class="tab-content" id="receive-claude-code">
                 <div class="code-section">
-                    <div class="code-label">Installation</div>
+                    
                     <div class="code-block">
                         <button class="copy-button" data-copy="receive-claude-code-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -494,7 +534,7 @@
             <!-- Receive + OpenClaw -->
             <div class="tab-content active" id="receive-openclaw">
                 <div class="code-section">
-                    <div class="code-label">Installation</div>
+                    
                     <div class="code-block">
                         <button class="copy-button" data-copy="receive-openclaw-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -536,7 +576,7 @@
             <!-- Make + Claude Code -->
             <div class="tab-content" id="make-claude-code">
                 <div class="code-section">
-                    <div class="code-label">Installation</div>
+                    
                     <div class="code-block">
                         <button class="copy-button" data-copy="make-claude-code-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -578,7 +618,7 @@
             <!-- Make + OpenClaw -->
             <div class="tab-content" id="make-openclaw">
                 <div class="code-section">
-                    <div class="code-label">Installation</div>
+                    
                     <div class="code-block">
                         <button class="copy-button" data-copy="make-openclaw-instruction">
                             <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -640,7 +680,7 @@
             document.getElementById('demo-' + selections.demo).style.display = 'block';
         }
 
-        // Tab switching for all groups
+        // Tab switching for skill/agent groups
         document.querySelectorAll('.hero-tabs').forEach(nav => {
             const group = nav.getAttribute('data-group');
             nav.querySelectorAll('.tab').forEach(tab => {
@@ -648,11 +688,19 @@
                     nav.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
                     selections[group] = tab.getAttribute('data-value');
-                    if (group === 'demo') {
-                        updateDemo();
-                    } else {
-                        updateContent();
-                    }
+                    updateContent();
+                });
+            });
+        });
+
+        // Demo underline tabs
+        document.querySelectorAll('.demo-tabs').forEach(nav => {
+            nav.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    nav.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    selections.demo = tab.getAttribute('data-value');
+                    updateDemo();
                 });
             });
         });
